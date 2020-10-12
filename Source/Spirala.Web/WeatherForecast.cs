@@ -1,6 +1,6 @@
 using System;
 
-namespace Spirala.Web
+namespace Aut3
 {
     public class WeatherForecast
     {
