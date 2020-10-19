@@ -8,5 +8,6 @@ namespace Aut3.Models
 {
     public class ApplicationUser : IdentityUser
     {
+
     }
 }

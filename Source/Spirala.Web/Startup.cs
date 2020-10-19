@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Aut3.Data;
 using Aut3.Models;
+using IdentityServer4.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -41,6 +42,7 @@ namespace Aut3
             services.AddAuthentication()
                 .AddIdentityServerJwt();
 
+            services.AddTransient<IProfileService, ProfileService>();
             services.AddControllersWithViews();
             services.AddRazorPages();
 
