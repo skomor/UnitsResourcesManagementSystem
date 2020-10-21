@@ -57,7 +57,7 @@ export class NavMenu extends Component {
                                     role && role.includes("Admin") ?
                                         <span>
                                             <NavItem>
-                                                <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
+                                                <NavLink tag={Link} className="text-dark" to="/ListUsers">List User</NavLink>
                                             </NavItem>
                                         </span>
                                         : null}

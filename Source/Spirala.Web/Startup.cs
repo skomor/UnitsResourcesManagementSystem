@@ -36,11 +36,13 @@ namespace Aut3
             services.AddDefaultIdentity<ApplicationUser>().AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.AddAuthentication()
+                .AddIdentityServerJwt();
+
             services.AddIdentityServer()
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
-            services.AddAuthentication()
-                .AddIdentityServerJwt();
+            
 
             services.AddTransient<IProfileService, ProfileService>();
             services.AddControllersWithViews();
