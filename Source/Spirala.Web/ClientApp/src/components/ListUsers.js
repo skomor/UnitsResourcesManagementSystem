@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import authService from './api-authorization/AuthorizeService'
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -19,7 +19,7 @@ export class ListUsers extends Component {
     constructor(props) {
         super(props);
         this.state = { users: [], loading: true, show: false };
-        this.handleClickOpen = this.handleClickOpen.bind(this);
+        //   this.handleClickOpen = this.handleClickOpen.bind(this);
         this.renderForecastsTable = this.renderForecastsTable.bind(this);
 
     }
@@ -28,17 +28,55 @@ export class ListUsers extends Component {
         this.populateUsersData();
     }
 
-    handleClickOpen (e) {
-        e.preventDefault();
-        this.setState({ show: true });
-        alert('Hello!' + this.state.show.toString());
+    handleClickOpen (id, role) {
+
+        this.setState({
+            show: true,
+            selectedRole: role,
+            selectedUserId: id
+        });
+
+        // alert('Hello!' + this.state.show.toString());
     }
 
     handleClose = () => {
-        this.setState({ show: false });
+        this.setState({
+            show: false,
+            selectedRole: '',
+            selectedUserId: ''
+        });
     };
+
+    async SendToDB(selectedUserId) {
+
+        const token = await authService.getAccessToken();
+        const response = await fetch('api/user' + "/" + selectedUserId,
+            {
+                method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+                headers: !token
+                    ? {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                    : {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                body: JSON.stringify(this.state.selectedRole) // body data type must match "Content-Type" header
+            });
+        this.setState({
+            show: false,
+            selectedRole: '',
+            selectedUserId: ''
+        });
+     //   return await response.json(); // parses JSON response into native JavaScript objects
+
+
+    }
+
     handleChange = (event) => {
-         this.setState({role: event.target.checked });
+        this.setState({ selectedRole: event.target.value });
     };
 
     renderForecastsTable(users) {
@@ -55,16 +93,16 @@ export class ListUsers extends Component {
                     </thead>
                     <tbody>
                     {users.map(user =>
-                    <tr key={user.id} onClick={this.handleClickOpen}>
-                        <td >{user.email}</td >
-                        <td >{user.id}</td>
-                        <td >{user.role}</td>
+                        <tr key={user.id} onClick={() => this.handleClickOpen(user.id, user.role)}>
+                            <td >{user.email}</td >
+                            <td >{user.id}</td>
+                            <td >{user.role}</td>
 
-            </tr>
-                )}
+                        </tr>
+                    )}
                     </tbody>
                 </table>
-          
+
             </div>
         );
     }
@@ -76,33 +114,32 @@ export class ListUsers extends Component {
                 open={this.state.show}
                 onClose={this.handleClose}
                 aria-labelledby="max-width-dialog-title">
-                <DialogTitle id="max-width-dialog-title">Optional sizes</DialogTitle>
+                <DialogTitle id="max-width-dialog-title">Change Role</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        You can set my maximum width and whether to adapt or not.
+                        Chose next role for this user
                     </DialogContentText>
                     <form noValidate>
                         <FormControl >
-                            <InputLabel htmlFor="max-width">maxWidth</InputLabel>
+                            <InputLabel htmlFor="max-width">Select Role</InputLabel>
                             <Select
                                 autoFocus
-                                onChange={this.handleChange}
-                                inputProps={{
-                                name: 'max-width',
-                                id: 'max-width',
-                            }}>
-                                <MenuItem value={false}>false</MenuItem>
+                                value={this.state.selectedRole}
+                                onChange={this.handleChange}>
                                 <MenuItem value="Admin">Admin</MenuItem>
                                 <MenuItem value="User">User</MenuItem>
 
                             </Select>
                         </FormControl>
-                   
+
                     </form>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={this.handleClose} color="primary">
                         Close
+                    </Button>
+                    <Button onClick={() => this.SendToDB(this.state.selectedUserId)} color="primary">
+                        Confirm
                     </Button>
                 </DialogActions>
             </Dialog>)
