@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Aut3.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {

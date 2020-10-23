@@ -11,9 +11,12 @@ using Microsoft.EntityFrameworkCore;
 using Aut3.Data;
 using Aut3.Models;
 using IdentityServer4.Services;
+using Microsoft.AspNet.OData.Builder;
+using Microsoft.AspNet.OData.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OData.Edm;
 
 namespace Aut3
 {
@@ -33,8 +36,15 @@ namespace Aut3
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
+
+
+
             services.AddDefaultIdentity<ApplicationUser>().AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddControllers().AddNewtonsoftJson();
+            services.AddOData();
+
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
@@ -42,11 +52,12 @@ namespace Aut3
             services.AddIdentityServer()
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
-            
 
             services.AddTransient<IProfileService, ProfileService>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+       
 
             services.AddAuthorization(options =>
             {
@@ -55,7 +66,8 @@ namespace Aut3
             });
 
             // In production, the React files will be served from this directory
-            services.AddSpaStaticFiles(configuration =>
+            services.AddSpaStaticFiles(
+                configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
             });
@@ -91,6 +103,9 @@ namespace Aut3
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapControllers();
+                endpoints.EnableDependencyInjection();
+                endpoints.Select().Filter().OrderBy().Count().MaxTop(10);
             });
 
             app.UseSpa(spa =>
@@ -103,13 +118,21 @@ namespace Aut3
                 }
             });
             CreateRoles(serviceProvider).Wait();
+            
+        }
+        private IEdmModel GetEdmModel()
+        {
+            var odataBuilder = new ODataConventionModelBuilder();
+            odataBuilder.EntitySet<Soldier>("Soldier");
+
+            return odataBuilder.GetEdmModel();
         }
 
         private async Task CreateRoles(IServiceProvider serviceProvider)
         {
             var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var UserManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            string[] roleNames = { "Admin" , "User" };
+            string[] roleNames = {"Admin", "User"};
             IdentityResult roleResult;
 
             foreach (var roleName in roleNames)
@@ -139,7 +162,5 @@ namespace Aut3
                 }
             }
         }
-
-
     }
 }

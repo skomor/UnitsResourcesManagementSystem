@@ -14,8 +14,11 @@ namespace Aut3.Data
     {
         public ApplicationDbContext(
             DbContextOptions options,
-            IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
+            IOptions<OperationalStoreOptions> operationalStoreOptions)
+                : base(options, operationalStoreOptions)
         {
         }
+
+        public DbSet<Aut3.Models.Soldier> Soldier { get; set; }
     }
 }

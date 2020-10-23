@@ -15,10 +15,11 @@ namespace Aut3.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> userManager;
+     
         public IEnumerable<ApplicationUser> Users { get; set; }
-        RoleManager<IdentityRole> roleManager;
 
+        RoleManager<IdentityRole> roleManager;
+        private readonly UserManager<ApplicationUser> userManager;
         public UserController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> role)
         {
             this.userManager = userManager;
