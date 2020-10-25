@@ -42,7 +42,10 @@ namespace Aut3
             services.AddDefaultIdentity<ApplicationUser>().AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddControllers().AddNewtonsoftJson();
+
+            services.AddControllers(mvcOptions =>
+                mvcOptions.EnableEndpointRouting = false);
+
             services.AddOData();
 
 
@@ -97,15 +100,41 @@ namespace Aut3
             app.UseAuthentication();
             app.UseIdentityServer();
             app.UseAuthorization();
+
+
+
+
+
+
+
+
+
+            app.UseMvc(routeBuilder =>
+            {
+                routeBuilder.Select().Filter();
+                routeBuilder.MapODataServiceRoute("odata", "odata", GetEdmModel());
+               // routeBuilder.EnableDependencyInjection();
+
+
+            });
+
+
+
+
+
+
+
+
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
-                endpoints.MapControllers();
+                /*endpoints.MapControllers();
                 endpoints.EnableDependencyInjection();
-                endpoints.Select().Filter().OrderBy().Count().MaxTop(10);
+                endpoints.Select().Filter().OrderBy().Count().MaxTop(10);*/
             });
 
             app.UseSpa(spa =>
