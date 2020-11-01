@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Aut3.Data;
 using Aut3.Models;
 using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 
@@ -16,6 +17,7 @@ namespace Aut3.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [EnableQuery]
+
     public class SoldierController : ODataController
     {
         private readonly ApplicationDbContext _context;

@@ -19,7 +19,6 @@ export class ListUsers extends Component {
     constructor(props) {
         super(props);
         this.state = { users: [], loading: true, show: false };
-        //   this.handleClickOpen = this.handleClickOpen.bind(this);
         this.renderForecastsTable = this.renderForecastsTable.bind(this);
 
     }
@@ -36,7 +35,6 @@ export class ListUsers extends Component {
             selectedUserId: id
         });
 
-        // alert('Hello!' + this.state.show.toString());
     }
 
     handleClose = () => {
@@ -52,7 +50,7 @@ export class ListUsers extends Component {
         const token = await authService.getAccessToken();
         const response = await fetch('api/user' + "/" + selectedUserId,
             {
-                method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+                method: 'PUT', 
                 headers: !token
                     ? {
                         'Content-Type': 'application/json',
@@ -63,14 +61,13 @@ export class ListUsers extends Component {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
                     },
-                body: JSON.stringify(this.state.selectedRole) // body data type must match "Content-Type" header
+                body: JSON.stringify(this.state.selectedRole) 
             });
         this.setState({
             show: false,
             selectedRole: '',
             selectedUserId: ''
         });
-     //   return await response.json(); // parses JSON response into native JavaScript objects
 
 
     }
