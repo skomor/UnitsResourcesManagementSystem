@@ -4,14 +4,16 @@ using Aut3.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Aut3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201109105819_zmianasamochodu1")]
+    partial class zmianasamochodu1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,7 +122,7 @@ namespace Aut3.Migrations
                     b.Property<Guid>("FamilyMemberId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("RelationToSoldier")
+                    b.Property<int>("NameOfRelationToSoldier")
                         .HasColumnType("int");
 
                     b.Property<Guid>("SoldierId")
@@ -256,7 +258,7 @@ namespace Aut3.Migrations
                     b.Property<string>("Vin")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("WeightKg")
+                    b.Property<int>("Weight")
                         .HasColumnType("int");
 
                     b.HasKey("VehicleId");

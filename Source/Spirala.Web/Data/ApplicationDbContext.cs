@@ -20,5 +20,15 @@ namespace Aut3.Data
         }
 
         public DbSet<Aut3.Models.Soldier> Soldier { get; set; }
+
+        public DbSet<Aut3.Models.FamilyMember> FamilyMember { get; set; }
+
+        public DbSet<Aut3.Models.FamilyRelationToSoldier> FamilyRelationToSoldier { get; set; }
+
+        public DbSet<Aut3.Models.MilitaryUnit> MilitaryUnit { get; set; }
+
+        public DbSet<Aut3.Models.RegistrationOfSoldier> RegistrationOfSoldier { get; set; }
+
+        public DbSet<Aut3.Models.Vehicle> Vehicle { get; set; }
     }
 }

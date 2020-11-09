@@ -18,23 +18,25 @@ namespace Aut3.Controllers
     [Route("api/[controller]")]
     [EnableQuery]
 
-    public class SoldierController : ODataController
+
+    public class SoldiersController : ODataController
     {
         private readonly ApplicationDbContext _context;
 
-        public SoldierController(ApplicationDbContext context)
+        public SoldiersController(ApplicationDbContext context)
         {
             _context = context;
         }
 
         // GET: api/Soldier
         [HttpGet]
-        [ODataRoute]
+        [ODataRoute("Soldiers")]
 
         // public  Task<ActionResult<IEnumerable<Soldier>>> GetSoldier()
         public async Task<IEnumerable<Soldier>> GetSoldier()
         {
             return await _context.Soldier.ToListAsync();
+            
             /*var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new Soldier
                 {
@@ -50,7 +52,7 @@ namespace Aut3.Controllers
 
         // GET: api/Soldiers/5
         [HttpGet("{id}")]
-        [ODataRoute("Soldier/{id}")]
+        [ODataRoute("Soldiers/{id}")]
         public async Task<ActionResult<Soldier>> GetSoldier([FromODataUri] Guid id)
         {
             var soldier = await _context.Soldier.FindAsync(id);
@@ -66,10 +68,10 @@ namespace Aut3.Controllers
         // PUT: api/Soldiers/5
 
         [HttpPut("{id}")]
-        [ODataRoute("Soldier/{id}")]
+        [ODataRoute("Soldiers/{id}")]
         public async Task<IActionResult> PutSoldier(Guid id, Soldier soldier)
         {
-            if (id != soldier.Id)
+            if (id != soldier.SoldierId)
             {
                 return BadRequest();
             }
@@ -99,18 +101,20 @@ namespace Aut3.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        [ODataRoute]
+        [ODataRoute("Soldiers")]
         public async Task<ActionResult<Soldier>> PostSoldier( Soldier soldier)
         {
             await _context.Soldier.AddAsync(soldier);
             await _context.SaveChangesAsync();
 
            // return CreatedAtAction("GetSoldier", new {id = soldier.Id}, soldier); //TODO: Wyrzuca dziwny error znowu związany z routingiem zastąpiono gorszym rozwiązaniem 
-           return Ok(await _context.Soldier.FindAsync( soldier.Id));
+           return Ok(await _context.Soldier.FindAsync( soldier.SoldierId));
         }
 
         // DELETE: api/Soldiers/5
         [HttpDelete("{id}")]
+        [ODataRoute("Soldiers/{id}")]
+
         public async Task<ActionResult<Soldier>> DeleteSoldier(Guid id)
         {
             var soldier = await _context.Soldier.FindAsync(id);
@@ -127,7 +131,7 @@ namespace Aut3.Controllers
 
         private bool SoldierExists(Guid id)
         {
-            return _context.Soldier.Any(e => e.Id == id);
+            return _context.Soldier.Any(e => e.SoldierId == id);
         }
     }
 }

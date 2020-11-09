@@ -102,16 +102,20 @@ namespace Aut3
             app.UseAuthorization();
 
 
+            /*
             app.UseMvc(routeBuilder =>
             {
+                /*
                 routeBuilder.Select().Filter();
                 routeBuilder.MapODataServiceRoute("odata", "odata", GetEdmModel());
                 routeBuilder.Filter().OrderBy().Expand().Select().MaxTop(100);
+                #1#
 
                // routeBuilder.EnableDependencyInjection();
 
 
             });
+            */
 
 
 
@@ -121,6 +125,10 @@ namespace Aut3
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.Select().Filter();
+                endpoints.MapODataRoute("odata", "odata", GetEdmModel());
+                endpoints.Filter().OrderBy().Expand().Select().MaxTop(100);
+
                 /*endpoints.MapControllers();
                 endpoints.EnableDependencyInjection();
                 endpoints.Select().Filter().OrderBy().Count().MaxTop(10);*/
@@ -141,7 +149,12 @@ namespace Aut3
         private IEdmModel GetEdmModel()
         {
             var odataBuilder = new ODataConventionModelBuilder();
-            odataBuilder.EntitySet<Soldier>("Soldier");
+            odataBuilder.EntitySet<Soldier>("Soldiers");
+            odataBuilder.EntitySet<FamilyMember>("FamilyMembers");
+            odataBuilder.EntitySet<FamilyRelationToSoldier>("FamilyRelationToSoldiers");
+            odataBuilder.EntitySet<MilitaryUnit>("MilitaryUnits");
+            odataBuilder.EntitySet<Vehicle>("Vehicles");
+            odataBuilder.EntitySet<RegistrationOfSoldier>("RegistrationOfSoldiers");
 
             return odataBuilder.GetEdmModel();
         }

@@ -4,14 +4,16 @@ using Aut3.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Aut3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201101204441_familyMember")]
+    partial class familyMember
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,113 +88,31 @@ namespace Aut3.Migrations
 
             modelBuilder.Entity("Aut3.Models.FamilyMember", b =>
                 {
-                    b.Property<Guid>("FamilyMemberId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("Date");
 
                     b.Property<string>("FName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("FamilyRelation")
+                        .HasColumnType("int");
+
                     b.Property<string>("LName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PlaceOfResidence")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("RelatedToSoldierId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("Sex")
-                        .HasColumnType("bit");
-
-                    b.HasKey("FamilyMemberId");
+                    b.HasKey("Id");
 
                     b.ToTable("FamilyMember");
                 });
 
-            modelBuilder.Entity("Aut3.Models.FamilyRelationToSoldier", b =>
-                {
-                    b.Property<int>("FamilyRelationToSoldierId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<Guid>("FamilyMemberId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("RelationToSoldier")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("SoldierId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("FamilyRelationToSoldierId");
-
-                    b.HasIndex("FamilyMemberId");
-
-                    b.HasIndex("SoldierId");
-
-                    b.ToTable("FamilyRelationToSoldier");
-                });
-
-            modelBuilder.Entity("Aut3.Models.MilitaryUnit", b =>
-                {
-                    b.Property<Guid>("MilitaryUnitId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UnitNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("MilitaryUnitId");
-
-                    b.ToTable("MilitaryUnit");
-                });
-
-            modelBuilder.Entity("Aut3.Models.RegistrationOfSoldier", b =>
-                {
-                    b.Property<Guid>("RegistrationOfSoldierId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("DateOfRegistration")
-                        .HasColumnType("Date");
-
-                    b.Property<string>("Notes")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Place")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("SoldierId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("UnitMilitaryUnitId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("RegistrationOfSoldierId");
-
-                    b.HasIndex("SoldierId")
-                        .IsUnique();
-
-                    b.HasIndex("UnitMilitaryUnitId");
-
-                    b.ToTable("RegistrationOfSoldier");
-                });
-
             modelBuilder.Entity("Aut3.Models.Soldier", b =>
                 {
-                    b.Property<Guid>("SoldierId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CurrUnitMilitaryUnitId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("FName")
@@ -204,66 +124,12 @@ namespace Aut3.Migrations
                     b.Property<string>("Pesel")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PlaceOfBirth")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("Sex")
                         .HasColumnType("bit");
 
-                    b.HasKey("SoldierId");
-
-                    b.HasIndex("CurrUnitMilitaryUnitId");
+                    b.HasKey("Id");
 
                     b.ToTable("Soldier");
-                });
-
-            modelBuilder.Entity("Aut3.Models.Vehicle", b =>
-                {
-                    b.Property<Guid>("VehicleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Brand")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CarType")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("CurrUnitMilitaryUnitId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("DateOfProduction")
-                        .HasColumnType("Date");
-
-                    b.Property<int>("EngineCapacityCC")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FuelConfig")
-                        .HasColumnType("int");
-
-                    b.Property<string>("LicensePlate")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Model")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PowerOutputHP")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TransmissionConfig")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Vin")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("WeightKg")
-                        .HasColumnType("int");
-
-                    b.HasKey("VehicleId");
-
-                    b.HasIndex("CurrUnitMilitaryUnitId");
-
-                    b.ToTable("Vehicle");
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.DeviceFlowCodes", b =>
@@ -481,48 +347,6 @@ namespace Aut3.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("Aut3.Models.FamilyRelationToSoldier", b =>
-                {
-                    b.HasOne("Aut3.Models.FamilyMember", "FamilyMember")
-                        .WithMany("FamilyRelationToSoldiers")
-                        .HasForeignKey("FamilyMemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Aut3.Models.Soldier", "Soldier")
-                        .WithMany("FamilyRelationToSoldiers")
-                        .HasForeignKey("SoldierId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Aut3.Models.RegistrationOfSoldier", b =>
-                {
-                    b.HasOne("Aut3.Models.Soldier", "Soldier")
-                        .WithOne("RegistrationOfSoldier")
-                        .HasForeignKey("Aut3.Models.RegistrationOfSoldier", "SoldierId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Aut3.Models.MilitaryUnit", "Unit")
-                        .WithMany("RegistrationOfSoldiers")
-                        .HasForeignKey("UnitMilitaryUnitId");
-                });
-
-            modelBuilder.Entity("Aut3.Models.Soldier", b =>
-                {
-                    b.HasOne("Aut3.Models.MilitaryUnit", "CurrUnit")
-                        .WithMany("Soldiers")
-                        .HasForeignKey("CurrUnitMilitaryUnitId");
-                });
-
-            modelBuilder.Entity("Aut3.Models.Vehicle", b =>
-                {
-                    b.HasOne("Aut3.Models.MilitaryUnit", "CurrUnit")
-                        .WithMany("Vehicles")
-                        .HasForeignKey("CurrUnitMilitaryUnitId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

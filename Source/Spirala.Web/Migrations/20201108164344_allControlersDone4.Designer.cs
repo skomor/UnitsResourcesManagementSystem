@@ -4,14 +4,16 @@ using Aut3.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Aut3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201108164344_allControlersDone4")]
+    partial class allControlersDone4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,7 +122,7 @@ namespace Aut3.Migrations
                     b.Property<Guid>("FamilyMemberId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("RelationToSoldier")
+                    b.Property<int>("NameOfRelationToSoldier")
                         .HasColumnType("int");
 
                     b.Property<Guid>("SoldierId")
@@ -161,7 +163,7 @@ namespace Aut3.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("DateOfRegistration")
+                    b.Property<DateTime>("DateTime")
                         .HasColumnType("Date");
 
                     b.Property<string>("Notes")
@@ -235,8 +237,8 @@ namespace Aut3.Migrations
                     b.Property<DateTime>("DateOfProduction")
                         .HasColumnType("Date");
 
-                    b.Property<int>("EngineCapacityCC")
-                        .HasColumnType("int");
+                    b.Property<decimal>("EngineCapacityLiters")
+                        .HasColumnType("decimal");
 
                     b.Property<int>("FuelConfig")
                         .HasColumnType("int");
@@ -247,17 +249,11 @@ namespace Aut3.Migrations
                     b.Property<string>("Model")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PowerOutputHP")
-                        .HasColumnType("int");
-
                     b.Property<int>("TransmissionConfig")
                         .HasColumnType("int");
 
                     b.Property<string>("Vin")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("WeightKg")
-                        .HasColumnType("int");
 
                     b.HasKey("VehicleId");
 
