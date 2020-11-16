@@ -37,7 +37,7 @@ namespace Aut3.Controllers
         [HttpGet("{id}")]
         [ODataRoute("FamilyRelationToSoldiers/{id}")]
 
-        public async Task<ActionResult<FamilyRelationToSoldier>> Get(int id)
+        public async Task<ActionResult<FamilyRelationToSoldier>> Get(Guid id)
         {
             var familyRelationToSoldier = await _context.FamilyRelationToSoldier.FindAsync(id);
 
@@ -55,7 +55,7 @@ namespace Aut3.Controllers
         [HttpPut("{id}")]
         [ODataRoute("FamilyRelationToSoldiers/{id}")]
 
-        public async Task<IActionResult> PutFamilyRelationToSoldier(int id, FamilyRelationToSoldier familyRelationToSoldier)
+        public async Task<IActionResult> PutFamilyRelationToSoldier(Guid id, FamilyRelationToSoldier familyRelationToSoldier)
         {
             if (id != familyRelationToSoldier.FamilyRelationToSoldierId)
             {
@@ -101,7 +101,7 @@ namespace Aut3.Controllers
         [HttpDelete("{id}")]
         [ODataRoute("FamilyRelationToSoldiers/{id}")]
 
-        public async Task<ActionResult<FamilyRelationToSoldier>> DeleteFamilyRelationToSoldier(int id)
+        public async Task<ActionResult<FamilyRelationToSoldier>> DeleteFamilyRelationToSoldier(Guid id)
         {
             var familyRelationToSoldier = await _context.FamilyRelationToSoldier.FindAsync(id);
             if (familyRelationToSoldier == null)
@@ -115,7 +115,7 @@ namespace Aut3.Controllers
             return familyRelationToSoldier;
         }
 
-        private bool FamilyRelationToSoldierExists(int id)
+        private bool FamilyRelationToSoldierExists(Guid id)
         {
             return _context.FamilyRelationToSoldier.Any(e => e.FamilyRelationToSoldierId == id);
         }

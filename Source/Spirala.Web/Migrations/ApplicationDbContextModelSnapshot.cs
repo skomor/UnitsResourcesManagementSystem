@@ -112,10 +112,9 @@ namespace Aut3.Migrations
 
             modelBuilder.Entity("Aut3.Models.FamilyRelationToSoldier", b =>
                 {
-                    b.Property<int>("FamilyRelationToSoldierId")
+                    b.Property<Guid>("FamilyRelationToSoldierId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("FamilyMemberId")
                         .HasColumnType("uniqueidentifier");
@@ -184,6 +183,41 @@ namespace Aut3.Migrations
                     b.HasIndex("UnitMilitaryUnitId");
 
                     b.ToTable("RegistrationOfSoldier");
+                });
+
+            modelBuilder.Entity("Aut3.Models.RequestsResponsesLog", b =>
+                {
+                    b.Property<Guid>("LogId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateTimeOfChange")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("IdOfChangedItem")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Method")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NextValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PreviousValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WhichModel")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WhichValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WhoChanged")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("LogId");
+
+                    b.ToTable("RequestsResponsesLog");
                 });
 
             modelBuilder.Entity("Aut3.Models.Soldier", b =>

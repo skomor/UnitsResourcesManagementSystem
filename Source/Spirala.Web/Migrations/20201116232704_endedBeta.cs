@@ -2,22 +2,21 @@
 
 namespace Aut3.Migrations
 {
-    public partial class allControlersDone2 : Migration
+    public partial class endedBeta : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<bool>(
-                name: "Sex",
-                table: "FamilyMember",
-                nullable: false,
-                defaultValue: false);
+            migrationBuilder.AddColumn<string>(
+                name: "Method",
+                table: "RequestsResponsesLog",
+                nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Sex",
-                table: "FamilyMember");
+                name: "Method",
+                table: "RequestsResponsesLog");
         }
     }
 }

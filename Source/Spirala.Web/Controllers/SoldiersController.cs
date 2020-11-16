@@ -11,6 +11,7 @@ using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace Aut3.Controllers
 {
@@ -26,6 +27,7 @@ namespace Aut3.Controllers
         public SoldiersController(ApplicationDbContext context)
         {
             _context = context;
+        
         }
 
         // GET: api/Soldier
@@ -37,17 +39,7 @@ namespace Aut3.Controllers
         {
             return await _context.Soldier.ToListAsync();
             
-            /*var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new Soldier
-                {
-                    FName = "DateTime.Now.AddDays(index)",
-                    LName =  "DateTime.Now.AddDays(index)",
-                    Id = new Guid("09e832a5-2573-432d-a415-06cdd6a5bca8"),
-                    Pesel = "98040402674",
-                    Sex = true
-                    
-                })
-                .ToArray();*/
+          
         }
 
         // GET: api/Soldiers/5
@@ -101,6 +93,7 @@ namespace Aut3.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
+        
         [ODataRoute("Soldiers")]
         public async Task<ActionResult<Soldier>> PostSoldier( Soldier soldier)
         {

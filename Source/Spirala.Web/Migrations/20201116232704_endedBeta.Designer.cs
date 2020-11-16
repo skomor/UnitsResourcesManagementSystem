@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Aut3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201108122028_allControlersDone2")]
-    partial class allControlersDone2
+    [Migration("20201116232704_endedBeta")]
+    partial class endedBeta
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -114,15 +114,14 @@ namespace Aut3.Migrations
 
             modelBuilder.Entity("Aut3.Models.FamilyRelationToSoldier", b =>
                 {
-                    b.Property<int>("FamilyRelationToSoldierId")
+                    b.Property<Guid>("FamilyRelationToSoldierId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("FamilyMemberId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("NameOfRelationToSoldier")
+                    b.Property<int>("RelationToSoldier")
                         .HasColumnType("int");
 
                     b.Property<Guid>("SoldierId")
@@ -163,7 +162,7 @@ namespace Aut3.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("DateTime")
+                    b.Property<DateTime>("DateOfRegistration")
                         .HasColumnType("Date");
 
                     b.Property<string>("Notes")
@@ -186,6 +185,41 @@ namespace Aut3.Migrations
                     b.HasIndex("UnitMilitaryUnitId");
 
                     b.ToTable("RegistrationOfSoldier");
+                });
+
+            modelBuilder.Entity("Aut3.Models.RequestsResponsesLog", b =>
+                {
+                    b.Property<Guid>("LogId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateTimeOfChange")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("IdOfChangedItem")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Method")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NextValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PreviousValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WhichModel")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WhichValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WhoChanged")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("LogId");
+
+                    b.ToTable("RequestsResponsesLog");
                 });
 
             modelBuilder.Entity("Aut3.Models.Soldier", b =>
@@ -237,8 +271,8 @@ namespace Aut3.Migrations
                     b.Property<DateTime>("DateOfProduction")
                         .HasColumnType("Date");
 
-                    b.Property<double>("EngineCapacityLiters")
-                        .HasColumnType("float");
+                    b.Property<int>("EngineCapacityCC")
+                        .HasColumnType("int");
 
                     b.Property<int>("FuelConfig")
                         .HasColumnType("int");
@@ -249,11 +283,17 @@ namespace Aut3.Migrations
                     b.Property<string>("Model")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PowerOutputHP")
+                        .HasColumnType("int");
+
                     b.Property<int>("TransmissionConfig")
                         .HasColumnType("int");
 
                     b.Property<string>("Vin")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("WeightKg")
+                        .HasColumnType("int");
 
                     b.HasKey("VehicleId");
 

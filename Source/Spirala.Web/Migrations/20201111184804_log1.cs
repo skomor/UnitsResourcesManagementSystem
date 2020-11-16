@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Aut3.Migrations
 {
-    public partial class ini2510 : Migration
+    public partial class log1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -64,6 +64,36 @@ namespace Aut3.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FamilyMember",
+                columns: table => new
+                {
+                    FamilyMemberId = table.Column<Guid>(nullable: false),
+                    FName = table.Column<string>(nullable: true),
+                    LName = table.Column<string>(nullable: true),
+                    Sex = table.Column<bool>(nullable: false),
+                    PlaceOfResidence = table.Column<string>(nullable: true),
+                    DateOfBirth = table.Column<DateTime>(type: "Date", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FamilyMember", x => x.FamilyMemberId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MilitaryUnit",
+                columns: table => new
+                {
+                    MilitaryUnitId = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    UnitNumber = table.Column<string>(nullable: true),
+                    City = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MilitaryUnit", x => x.MilitaryUnitId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PersistedGrants",
                 columns: table => new
                 {
@@ -81,18 +111,21 @@ namespace Aut3.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Soldier",
+                name: "RequestsResponsesLog",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    FName = table.Column<string>(nullable: true),
-                    LName = table.Column<string>(nullable: true),
-                    Pesel = table.Column<string>(nullable: true),
-                    Sex = table.Column<bool>(nullable: false)
+                    LogId = table.Column<Guid>(nullable: false),
+                    WhoChanged = table.Column<string>(nullable: true),
+                    WhichModel = table.Column<string>(nullable: true),
+                    IdOfChangedItem = table.Column<Guid>(nullable: false),
+                    WhichValue = table.Column<string>(nullable: true),
+                    PreviousValue = table.Column<string>(nullable: true),
+                    NextValue = table.Column<string>(nullable: true),
+                    DateTimeOfChange = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Soldier", x => x.Id);
+                    table.PrimaryKey("PK_RequestsResponsesLog", x => x.LogId);
                 });
 
             migrationBuilder.CreateTable(
@@ -201,6 +234,112 @@ namespace Aut3.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Soldier",
+                columns: table => new
+                {
+                    SoldierId = table.Column<Guid>(nullable: false),
+                    FName = table.Column<string>(nullable: true),
+                    LName = table.Column<string>(nullable: true),
+                    Pesel = table.Column<string>(nullable: true),
+                    Sex = table.Column<bool>(nullable: false),
+                    PlaceOfBirth = table.Column<string>(nullable: true),
+                    CurrUnitMilitaryUnitId = table.Column<Guid>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Soldier", x => x.SoldierId);
+                    table.ForeignKey(
+                        name: "FK_Soldier_MilitaryUnit_CurrUnitMilitaryUnitId",
+                        column: x => x.CurrUnitMilitaryUnitId,
+                        principalTable: "MilitaryUnit",
+                        principalColumn: "MilitaryUnitId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Vehicle",
+                columns: table => new
+                {
+                    VehicleId = table.Column<Guid>(nullable: false),
+                    Vin = table.Column<string>(nullable: true),
+                    Brand = table.Column<string>(nullable: true),
+                    Model = table.Column<string>(nullable: true),
+                    LicensePlate = table.Column<string>(nullable: true),
+                    CarType = table.Column<int>(nullable: false),
+                    TransmissionConfig = table.Column<int>(nullable: false),
+                    FuelConfig = table.Column<int>(nullable: false),
+                    DateOfProduction = table.Column<DateTime>(type: "Date", nullable: false),
+                    EngineCapacityCC = table.Column<int>(nullable: false),
+                    WeightKg = table.Column<int>(nullable: false),
+                    PowerOutputHP = table.Column<int>(nullable: false),
+                    CurrUnitMilitaryUnitId = table.Column<Guid>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Vehicle", x => x.VehicleId);
+                    table.ForeignKey(
+                        name: "FK_Vehicle_MilitaryUnit_CurrUnitMilitaryUnitId",
+                        column: x => x.CurrUnitMilitaryUnitId,
+                        principalTable: "MilitaryUnit",
+                        principalColumn: "MilitaryUnitId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FamilyRelationToSoldier",
+                columns: table => new
+                {
+                    FamilyRelationToSoldierId = table.Column<Guid>(nullable: false),
+                    FamilyMemberId = table.Column<Guid>(nullable: false),
+                    SoldierId = table.Column<Guid>(nullable: false),
+                    RelationToSoldier = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FamilyRelationToSoldier", x => x.FamilyRelationToSoldierId);
+                    table.ForeignKey(
+                        name: "FK_FamilyRelationToSoldier_FamilyMember_FamilyMemberId",
+                        column: x => x.FamilyMemberId,
+                        principalTable: "FamilyMember",
+                        principalColumn: "FamilyMemberId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FamilyRelationToSoldier_Soldier_SoldierId",
+                        column: x => x.SoldierId,
+                        principalTable: "Soldier",
+                        principalColumn: "SoldierId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RegistrationOfSoldier",
+                columns: table => new
+                {
+                    RegistrationOfSoldierId = table.Column<Guid>(nullable: false),
+                    Place = table.Column<string>(nullable: true),
+                    Notes = table.Column<string>(nullable: true),
+                    DateOfRegistration = table.Column<DateTime>(type: "Date", nullable: false),
+                    UnitMilitaryUnitId = table.Column<Guid>(nullable: true),
+                    SoldierId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RegistrationOfSoldier", x => x.RegistrationOfSoldierId);
+                    table.ForeignKey(
+                        name: "FK_RegistrationOfSoldier_Soldier_SoldierId",
+                        column: x => x.SoldierId,
+                        principalTable: "Soldier",
+                        principalColumn: "SoldierId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RegistrationOfSoldier_MilitaryUnit_UnitMilitaryUnitId",
+                        column: x => x.UnitMilitaryUnitId,
+                        principalTable: "MilitaryUnit",
+                        principalColumn: "MilitaryUnitId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -252,6 +391,16 @@ namespace Aut3.Migrations
                 column: "Expiration");
 
             migrationBuilder.CreateIndex(
+                name: "IX_FamilyRelationToSoldier_FamilyMemberId",
+                table: "FamilyRelationToSoldier",
+                column: "FamilyMemberId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FamilyRelationToSoldier_SoldierId",
+                table: "FamilyRelationToSoldier",
+                column: "SoldierId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PersistedGrants_Expiration",
                 table: "PersistedGrants",
                 column: "Expiration");
@@ -260,6 +409,27 @@ namespace Aut3.Migrations
                 name: "IX_PersistedGrants_SubjectId_ClientId_Type",
                 table: "PersistedGrants",
                 columns: new[] { "SubjectId", "ClientId", "Type" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RegistrationOfSoldier_SoldierId",
+                table: "RegistrationOfSoldier",
+                column: "SoldierId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RegistrationOfSoldier_UnitMilitaryUnitId",
+                table: "RegistrationOfSoldier",
+                column: "UnitMilitaryUnitId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Soldier_CurrUnitMilitaryUnitId",
+                table: "Soldier",
+                column: "CurrUnitMilitaryUnitId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vehicle_CurrUnitMilitaryUnitId",
+                table: "Vehicle",
+                column: "CurrUnitMilitaryUnitId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -283,16 +453,34 @@ namespace Aut3.Migrations
                 name: "DeviceCodes");
 
             migrationBuilder.DropTable(
+                name: "FamilyRelationToSoldier");
+
+            migrationBuilder.DropTable(
                 name: "PersistedGrants");
 
             migrationBuilder.DropTable(
-                name: "Soldier");
+                name: "RegistrationOfSoldier");
+
+            migrationBuilder.DropTable(
+                name: "RequestsResponsesLog");
+
+            migrationBuilder.DropTable(
+                name: "Vehicle");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "FamilyMember");
+
+            migrationBuilder.DropTable(
+                name: "Soldier");
+
+            migrationBuilder.DropTable(
+                name: "MilitaryUnit");
         }
     }
 }
