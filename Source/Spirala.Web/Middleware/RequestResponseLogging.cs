@@ -37,78 +37,125 @@ namespace Aut3.Middleware
 
         public async Task Invoke(HttpContext context, ApplicationDbContext db)
         {
-            context.Request.EnableBuffering();
-
-            IList<JToken> jSonObjectFromBody = null;
-            var body1 = await getBody(context);
-            if (body1 != "")
-            {
-                jSonObjectFromBody = getJSonObjectFromBody(body1);
-            }
-
-            string address = context.Request.Path;
-            string[] addressSplit = address.Split("/");
-            string nameOfController;
-            string idOfPutItem;
             List<string> listOfChangedValues = new List<string>();
             List<string> previousValues = new List<string>();
             List<string> newValues = new List<string>();
-            if (addressSplit.Length > 3)
+            IList<JToken> jSonObjectFromBody = null;
+            var idInPost = "";
+
+            context.Request.EnableBuffering();
+
+
+            var body1 = await getBody(context);
+            string address = context.Request.Path;
+            string[] addressSplit = address.Split("/");
+            string requestMethod = context.Request.Method;
+
+
+            string nameOfController = "";
+            if (addressSplit.Length > 2)
             {
                 nameOfController = addressSplit[2];
-                idOfPutItem = addressSplit[3];
-                string dataBeforeChanged;
+            }
 
-                if (context.Request.Method == "PUT" && body1 != "")
+
+            var idInAddress = "";
+
+            if (addressSplit.Length > 3)
+            {
+                idInAddress = addressSplit[3];
+            }
+
+            if (body1 != "")
+            {
+                jSonObjectFromBody = getJSonObjectFrom(body1);
+            }
+
+            if (idInAddress != "")
+            {
+                if (requestMethod == "PUT" && body1 != "")
                 {
-                    IList<JToken> dataBeforeChangedAsJson;
-
-                    dataBeforeChanged = await getPreviousDataFromTable(nameOfController, db, idOfPutItem);
-
-
+                    string dataBeforeChanged = await GetPreviousDataFromTable(nameOfController, db, idInAddress);
                     if (!dataBeforeChanged.IsNullOrEmpty())
                     {
-                        dataBeforeChangedAsJson = getJSonObjectFromBody(dataBeforeChanged);
+                        IList<JToken> dataBeforeChangedAsJson = getJSonObjectFrom(dataBeforeChanged);
                         listOfChangedValues = getWhichValuesWereChanged(dataBeforeChangedAsJson, jSonObjectFromBody);
                         previousValues = getValuesFromJSONThatHavePathIn(dataBeforeChangedAsJson, listOfChangedValues);
                         newValues = getValuesFromJSONThatHavePathIn(jSonObjectFromBody, listOfChangedValues);
                     }
                 }
+
+                if (requestMethod == "DELETE" )
+                {
+                    string dataBeforeChanged = await GetPreviousDataFromTable(nameOfController, db, idInAddress);
+
+                    if (!dataBeforeChanged.IsNullOrEmpty())
+                    {
+                        IList<JToken> dataBeforeChangedAsJson = getJSonObjectFrom(dataBeforeChanged);
+                        listOfChangedValues = getWhichValuesWereChanged(dataBeforeChangedAsJson);
+                        previousValues = getValuesFromJSONThatHavePathIn(dataBeforeChangedAsJson, listOfChangedValues);
+                    }
+                }
+
+            }
+            else
+            {
+                if (requestMethod == "POST" && body1 != "")
+                {
+                    listOfChangedValues = getWhichValuesWereChanged(jSonObjectFromBody);
+                    newValues = getValuesFromJSONThatHavePathIn(jSonObjectFromBody, listOfChangedValues);
+                    idInPost = GetIdFromBody(nameOfController,jSonObjectFromBody);
+
+                }
             }
 
-            
+
             await _next.Invoke(context);
 
-            
+
             var nameOfEditor = context.User.Identity.Name;
             if (addressSplit[1] == "api")
             {
             }
             else if (addressSplit[1] == "odata" && listOfChangedValues.Count > 0)
             {
-                if (context.Response.StatusCode == 204 && context.Request.Method == "PUT")
+                if (context.Response.StatusCode == 204 && requestMethod == "PUT")
                 {
                     var changedValuesAsString = String.Join(", ", listOfChangedValues);
                     var previousValuesAsString = String.Join(", ", previousValues);
                     var newValuesAsString = String.Join(", ", newValues);
 
-                    RequestsResponsesLog toLog = new RequestsResponsesLog(new Guid(), nameOfEditor, addressSplit[2],
-                        "PUT", new Guid(addressSplit[3]), changedValuesAsString,previousValuesAsString,newValuesAsString,DateTime.Now);
-                   await db.RequestsResponsesLog.AddAsync(toLog);
-                     await db.SaveChangesAsync();
+                    RequestsResponsesLog toLog = new RequestsResponsesLog(new Guid(), nameOfEditor, nameOfController,
+                        "PUT", new Guid(idInAddress), changedValuesAsString, previousValuesAsString,
+                        newValuesAsString, DateTime.Now);
+                    await db.RequestsResponsesLog.AddAsync(toLog);
+                    await db.SaveChangesAsync();
+                }
+                if (context.Response.StatusCode == 200 && requestMethod == "DELETE")
+                {
+                    var changedValuesAsString = String.Join(", ", listOfChangedValues);
+                    var previousValuesAsString = String.Join(", ", previousValues);
+
+                    RequestsResponsesLog toLog = new RequestsResponsesLog(new Guid(), nameOfEditor, nameOfController,
+                        "DELETE", new Guid(idInAddress), changedValuesAsString, previousValuesAsString,
+                        " ", DateTime.Now);
+                    await db.RequestsResponsesLog.AddAsync(toLog);
+                    await db.SaveChangesAsync();
                 }
 
-                if (context.Response.StatusCode == 204 && context.Request.Method == "DELETE")
+                if (context.Response.StatusCode == 200 && requestMethod == "POST")
                 {
-                    
+                    var changedValuesAsString = String.Join(", ", listOfChangedValues);
+                    var newValuesAsString = String.Join(", ", newValues);
+
+                    RequestsResponsesLog toLog = new RequestsResponsesLog(new Guid(), nameOfEditor, nameOfController,
+                        "POST", new Guid(idInPost), changedValuesAsString, " ", newValuesAsString, DateTime.Now);
+                    await db.RequestsResponsesLog.AddAsync(toLog);
+                    await db.SaveChangesAsync();
                 }
             }
-
-            /*var ok1 = context.User.Claims.GetType();
-            var adress1 = context.Request.Path;
-
-            var userIdentity1 = context.User.Identity;*/
         }
+
 
         private List<string> getValuesFromJSONThatHavePathIn(IList<JToken> jsonData, List<string> listOfPaths)
         {
@@ -148,14 +195,26 @@ namespace Aut3.Middleware
             return output;
         }
 
-        private IList<JToken> getJSonObjectFromBody(string body1)
+        private List<string> getWhichValuesWereChanged(IList<JToken> dataBeforeChangedAsJson)
+        {
+            List<string> output = new List<string>();
+            for (int i = 0; i < dataBeforeChangedAsJson.Count; i++)
+            {
+                output.Add(dataBeforeChangedAsJson[i].Path);
+            }
+
+            return output;
+        }
+
+
+        private IList<JToken> getJSonObjectFrom(string body1)
         {
             IList<JToken> listOfJSonObjectsFromBody;
             body1 = body1.Replace("\r\n", " ");
             if (body1 != "")
             {
                 JObject input = JObject.Parse(body1);
-                listOfJSonObjectsFromBody = input.Children().ToList(); //this is closest to json I could get 
+                listOfJSonObjectsFromBody = input.Children().ToList();
                 return listOfJSonObjectsFromBody;
             }
 
@@ -178,7 +237,7 @@ namespace Aut3.Middleware
             return body1;
         }
 
-        private async Task<string> getPreviousDataFromTable(string nameOfController, ApplicationDbContext db,
+        private async Task<string> GetPreviousDataFromTable(string nameOfController, ApplicationDbContext db,
             string idOfPutItem)
         {
             switch (nameOfController)
@@ -230,6 +289,70 @@ namespace Aut3.Middleware
         public string ToStringAsJson<T>(T input)
         {
             return JsonConvert.SerializeObject(input);
+        }
+        
+        
+         private string GetIdFromBody(string nameOfController,IList<JToken> jSonObjectFromBody)
+        {
+            switch (nameOfController)
+            {
+                case "Soldiers":
+                {
+                    for (int i = 0; i < jSonObjectFromBody.Count; i++)
+                    {
+                        if (jSonObjectFromBody[i].Path == "SoldierId")
+                            return jSonObjectFromBody[i].First.ToString();
+                    }
+                    return null;
+                }
+                case "Vehicles":
+                {
+                    for (int i = 0; i < jSonObjectFromBody.Count; i++)
+                    {
+                        if (jSonObjectFromBody[i].Path == "VehicleId")
+                            return jSonObjectFromBody[i].First.ToString();
+                    }
+                    return null;
+                }
+                case "MilitaryUnits":
+                {
+                    for (int i = 0; i < jSonObjectFromBody.Count; i++)
+                    {
+                        if (jSonObjectFromBody[i].Path == "MilitaryUnitId")
+                            return jSonObjectFromBody[i].First.ToString();
+                    }
+                    return null;
+                }
+                case "FamilyMembers":
+                {
+                    for (int i = 0; i < jSonObjectFromBody.Count; i++)
+                    {
+                        if (jSonObjectFromBody[i].Path == "FamilyMemberId")
+                            return jSonObjectFromBody[i].First.ToString();
+                    }
+                    return null;
+                }
+                case "RegistrationOfSoldiers":
+                {
+                    for (int i = 0; i < jSonObjectFromBody.Count; i++)
+                    {
+                        if (jSonObjectFromBody[i].Path == "RegistrationOfSoldierId")
+                            return jSonObjectFromBody[i].First.ToString();
+                    }
+                    return null;
+                }
+                case "FamilyRelationToSoldiers":
+                {
+                    for (int i = 0; i < jSonObjectFromBody.Count; i++)
+                    {
+                        if (jSonObjectFromBody[i].Path == "FamilyRelationToSoldierId")
+                            return jSonObjectFromBody[i].First.ToString();
+                    }
+                    return null;
+                }
+            }
+
+            return null;
         }
     }
 }
