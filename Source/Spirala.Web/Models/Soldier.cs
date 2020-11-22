@@ -18,7 +18,9 @@ namespace Aut3.Models
         public MilitaryUnit CurrUnit { get; set; }
         
         
+        
         public virtual ICollection<FamilyRelationToSoldier> FamilyRelationToSoldiers { get; set; }
+        public virtual ICollection<Vehicle> OwnedVehicles { get; set; }
 
 
         

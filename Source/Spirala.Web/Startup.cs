@@ -132,7 +132,7 @@ namespace Aut3
                 endpoints.MapRazorPages();
                 endpoints.Select().Filter();
                 endpoints.MapODataRoute("odata", "odata", GetEdmModel());
-                endpoints.Filter().OrderBy().Expand().Select().MaxTop(100);
+                endpoints.Filter().OrderBy().Expand().Select().MaxTop(100).Count();
 
                 /*endpoints.MapControllers();
                 endpoints.EnableDependencyInjection();

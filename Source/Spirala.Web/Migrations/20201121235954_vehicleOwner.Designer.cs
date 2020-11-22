@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Aut3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201116232704_endedBeta")]
-    partial class endedBeta
+    [Migration("20201121235954_vehicleOwner")]
+    partial class vehicleOwner
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -286,6 +286,9 @@ namespace Aut3.Migrations
                     b.Property<int>("PowerOutputHP")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("SoldierId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("TransmissionConfig")
                         .HasColumnType("int");
 
@@ -298,6 +301,8 @@ namespace Aut3.Migrations
                     b.HasKey("VehicleId");
 
                     b.HasIndex("CurrUnitMilitaryUnitId");
+
+                    b.HasIndex("SoldierId");
 
                     b.ToTable("Vehicle");
                 });
@@ -559,6 +564,12 @@ namespace Aut3.Migrations
                     b.HasOne("Aut3.Models.MilitaryUnit", "CurrUnit")
                         .WithMany("Vehicles")
                         .HasForeignKey("CurrUnitMilitaryUnitId");
+
+                    b.HasOne("Aut3.Models.Soldier", "Owner")
+                        .WithMany("OwnedVehicles")
+                        .HasForeignKey("SoldierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -25,8 +25,12 @@ namespace Aut3.Models
         public int EngineCapacityCC { get; set; }
         public int WeightKg { get; set; }
         public int PowerOutputHP { get; set; }
+        
         public MilitaryUnit CurrUnit { get; set; }
         
+        public Guid SoldierId { get; set;  }
+        public Soldier Owner { get; set; }
+
         /*public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string WhoEdited { get; set; }*/

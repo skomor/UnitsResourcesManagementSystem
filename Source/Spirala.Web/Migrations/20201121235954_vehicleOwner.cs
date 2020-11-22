@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Aut3.Migrations
 {
-    public partial class log1 : Migration
+    public partial class vehicleOwner : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -117,6 +117,7 @@ namespace Aut3.Migrations
                     LogId = table.Column<Guid>(nullable: false),
                     WhoChanged = table.Column<string>(nullable: true),
                     WhichModel = table.Column<string>(nullable: true),
+                    Method = table.Column<string>(nullable: true),
                     IdOfChangedItem = table.Column<Guid>(nullable: false),
                     WhichValue = table.Column<string>(nullable: true),
                     PreviousValue = table.Column<string>(nullable: true),
@@ -258,35 +259,6 @@ namespace Aut3.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Vehicle",
-                columns: table => new
-                {
-                    VehicleId = table.Column<Guid>(nullable: false),
-                    Vin = table.Column<string>(nullable: true),
-                    Brand = table.Column<string>(nullable: true),
-                    Model = table.Column<string>(nullable: true),
-                    LicensePlate = table.Column<string>(nullable: true),
-                    CarType = table.Column<int>(nullable: false),
-                    TransmissionConfig = table.Column<int>(nullable: false),
-                    FuelConfig = table.Column<int>(nullable: false),
-                    DateOfProduction = table.Column<DateTime>(type: "Date", nullable: false),
-                    EngineCapacityCC = table.Column<int>(nullable: false),
-                    WeightKg = table.Column<int>(nullable: false),
-                    PowerOutputHP = table.Column<int>(nullable: false),
-                    CurrUnitMilitaryUnitId = table.Column<Guid>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Vehicle", x => x.VehicleId);
-                    table.ForeignKey(
-                        name: "FK_Vehicle_MilitaryUnit_CurrUnitMilitaryUnitId",
-                        column: x => x.CurrUnitMilitaryUnitId,
-                        principalTable: "MilitaryUnit",
-                        principalColumn: "MilitaryUnitId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "FamilyRelationToSoldier",
                 columns: table => new
                 {
@@ -338,6 +310,42 @@ namespace Aut3.Migrations
                         principalTable: "MilitaryUnit",
                         principalColumn: "MilitaryUnitId",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Vehicle",
+                columns: table => new
+                {
+                    VehicleId = table.Column<Guid>(nullable: false),
+                    Vin = table.Column<string>(nullable: true),
+                    Brand = table.Column<string>(nullable: true),
+                    Model = table.Column<string>(nullable: true),
+                    LicensePlate = table.Column<string>(nullable: true),
+                    CarType = table.Column<int>(nullable: false),
+                    TransmissionConfig = table.Column<int>(nullable: false),
+                    FuelConfig = table.Column<int>(nullable: false),
+                    DateOfProduction = table.Column<DateTime>(type: "Date", nullable: false),
+                    EngineCapacityCC = table.Column<int>(nullable: false),
+                    WeightKg = table.Column<int>(nullable: false),
+                    PowerOutputHP = table.Column<int>(nullable: false),
+                    CurrUnitMilitaryUnitId = table.Column<Guid>(nullable: true),
+                    SoldierId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Vehicle", x => x.VehicleId);
+                    table.ForeignKey(
+                        name: "FK_Vehicle_MilitaryUnit_CurrUnitMilitaryUnitId",
+                        column: x => x.CurrUnitMilitaryUnitId,
+                        principalTable: "MilitaryUnit",
+                        principalColumn: "MilitaryUnitId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Vehicle_Soldier_SoldierId",
+                        column: x => x.SoldierId,
+                        principalTable: "Soldier",
+                        principalColumn: "SoldierId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -430,6 +438,11 @@ namespace Aut3.Migrations
                 name: "IX_Vehicle_CurrUnitMilitaryUnitId",
                 table: "Vehicle",
                 column: "CurrUnitMilitaryUnitId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vehicle_SoldierId",
+                table: "Vehicle",
+                column: "SoldierId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

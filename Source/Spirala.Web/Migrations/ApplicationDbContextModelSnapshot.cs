@@ -284,6 +284,9 @@ namespace Aut3.Migrations
                     b.Property<int>("PowerOutputHP")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("SoldierId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("TransmissionConfig")
                         .HasColumnType("int");
 
@@ -296,6 +299,8 @@ namespace Aut3.Migrations
                     b.HasKey("VehicleId");
 
                     b.HasIndex("CurrUnitMilitaryUnitId");
+
+                    b.HasIndex("SoldierId");
 
                     b.ToTable("Vehicle");
                 });
@@ -557,6 +562,12 @@ namespace Aut3.Migrations
                     b.HasOne("Aut3.Models.MilitaryUnit", "CurrUnit")
                         .WithMany("Vehicles")
                         .HasForeignKey("CurrUnitMilitaryUnitId");
+
+                    b.HasOne("Aut3.Models.Soldier", "Owner")
+                        .WithMany("OwnedVehicles")
+                        .HasForeignKey("SoldierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
