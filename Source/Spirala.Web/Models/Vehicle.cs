@@ -1,6 +1,8 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Aut3.Models.VehiclesEnums;
+using Microsoft.AspNet.OData.Builder;
 using Microsoft.OData.Edm;
 
 namespace Aut3.Models
@@ -13,6 +15,7 @@ namespace Aut3.Models
         
         public Guid VehicleId { get; set; }
         public string Vin { get; set; }
+        [Required]
         public string Brand  { get; set; }
         public string Model  { get; set; }
         public string LicensePlate  { get; set; }
@@ -26,7 +29,10 @@ namespace Aut3.Models
         public int WeightKg { get; set; }
         public int PowerOutputHP { get; set; }
         
+        [AutoExpand]
         public MilitaryUnit CurrUnit { get; set; }
+        public Guid CurrUnitID { get; set; }
+
         
         public Guid SoldierId { get; set;  }
         public Soldier Owner { get; set; }

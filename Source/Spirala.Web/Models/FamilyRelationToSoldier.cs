@@ -7,6 +7,7 @@ namespace Aut3.Models
     public class FamilyRelationToSoldier
     {
         public Guid FamilyRelationToSoldierId { get; set; }
+        
         public Guid FamilyMemberId { get; set; }
         public Guid SoldierId { get; set; }
 

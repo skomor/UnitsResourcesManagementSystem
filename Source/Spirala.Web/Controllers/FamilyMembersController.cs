@@ -29,16 +29,19 @@ namespace Aut3.Controllers
         [HttpGet]
         [ODataRoute("FamilyMembers")]
 
-        public async Task<IEnumerable<FamilyMember>> GetFamilyMember()
+        public  IQueryable<FamilyMember> GetFamilyMember()
         {
-            return await _context.FamilyMember.ToListAsync();
+            return  _context.FamilyMember;
         }
 
         // GET: api/FamilyMembers/5
         [HttpGet("{id}")]
         [ODataRoute("FamilyMembers/{id}")]
-
-        public async Task<ActionResult<FamilyMember>> GetFamilyMember([FromODataUri] Guid id)
+        public SingleResult<FamilyMember> GetCategory([FromODataUri] Guid id)
+        {
+            return SingleResult.Create(_context.FamilyMember.Where(c => c.FamilyMemberId == id));
+        }
+        /*public async Task<ActionResult<FamilyMember>> GetFamilyMember([FromODataUri] Guid id)
         {
             var familyMember = await _context.FamilyMember.FindAsync(id);
 
@@ -48,7 +51,7 @@ namespace Aut3.Controllers
             }
 
             return familyMember;
-        }
+        }*/
 
         // PUT: api/FamilyMembers/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for

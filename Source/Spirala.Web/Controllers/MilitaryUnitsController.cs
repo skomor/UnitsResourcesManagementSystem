@@ -29,25 +29,18 @@ namespace Aut3.Controllers
         [HttpGet]
         [ODataRoute("MilitaryUnits")]
 
-        public async Task<ActionResult<IEnumerable<MilitaryUnit>>> GetMilitaryUnit()
+        public  IQueryable<MilitaryUnit> GetMilitaryUnit()
         {
-            return await _context.MilitaryUnit.ToListAsync();
+            return  _context.MilitaryUnit;
         }
 
         // GET: api/MilitaryUnits/5
         [HttpGet("{id}")]
         [ODataRoute("MilitaryUnits/{id}")]
 
-        public async Task<ActionResult<MilitaryUnit>> GetMilitaryUnit(Guid id)
+        public SingleResult<MilitaryUnit> GetCategory([FromODataUri] Guid id)
         {
-            var militaryUnit = await _context.MilitaryUnit.FindAsync(id);
-
-            if (militaryUnit == null)
-            {
-                return NotFound();
-            }
-
-            return militaryUnit;
+            return SingleResult.Create(_context.MilitaryUnit.Where(c => c.MilitaryUnitId == id));
         }
 
         // PUT: api/MilitaryUnits/5

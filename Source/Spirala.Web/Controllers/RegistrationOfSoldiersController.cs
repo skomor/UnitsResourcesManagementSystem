@@ -26,29 +26,26 @@ namespace Aut3.Controllers
         }
 
         // GET: api/RegistrationOfSoldiers
-        [HttpGet]       
+        [HttpGet]
         [ODataRoute("RegistrationOfSoldiers")]
-
-        public async Task<ActionResult<IEnumerable<RegistrationOfSoldier>>> GetRegistrationOfSoldier()
+        public  IQueryable<RegistrationOfSoldier> GetRegistrationOfSoldier()
         {
-            return await _context.RegistrationOfSoldier.ToListAsync();
+            return  _context.RegistrationOfSoldier;
         }
+
+
+        
 
         // GET: api/RegistrationOfSoldiers/5
         [HttpGet("{id}")]
         [ODataRoute("RegistrationOfSoldiers/{id}")]
-
-        public async Task<ActionResult<RegistrationOfSoldier>> GetRegistrationOfSoldier(Guid id)
+        
+        public SingleResult<RegistrationOfSoldier> GetCategory([FromODataUri] Guid id)
         {
-            var registrationOfSoldier = await _context.RegistrationOfSoldier.FindAsync(id);
-
-            if (registrationOfSoldier == null)
-            {
-                return NotFound();
-            }
-
-            return registrationOfSoldier;
+            return SingleResult.Create(_context.RegistrationOfSoldier.Where(c => c.RegistrationOfSoldierId == id));
         }
+
+        
 
         // PUT: api/RegistrationOfSoldiers/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for

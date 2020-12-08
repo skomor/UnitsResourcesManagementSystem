@@ -160,6 +160,9 @@ namespace Aut3
             odataBuilder.EntitySet<MilitaryUnit>("MilitaryUnits");
             odataBuilder.EntitySet<Vehicle>("Vehicles");
             odataBuilder.EntitySet<RegistrationOfSoldier>("RegistrationOfSoldiers");
+            odataBuilder.EntitySet<Wojewodztwo>("Wojewodztwa");
+            odataBuilder.EntitySet<Powiat>("Powiaty");
+            odataBuilder.EntitySet<Miasto>("Miasta");
 
             return odataBuilder.GetEdmModel();
         }

@@ -29,25 +29,18 @@ namespace Aut3.Controllers
         [HttpGet]
         [ODataRoute("Vehicles")]
 
-        public async Task<ActionResult<IEnumerable<Vehicle>>> GetVehicle()
+        public IQueryable<Vehicle> GetVehicle()
         {
-            return await _context.Vehicle.ToListAsync();
+            return  _context.Vehicle;
         }
 
         // GET: api/Vehicles/5
         [HttpGet("{id}")]
         [ODataRoute("Vehicles/{id}")]
 
-        public async Task<ActionResult<Vehicle>> GetVehicle(Guid id)
+        public SingleResult<Vehicle> GetCategory([FromODataUri] Guid id)
         {
-            var vehicle = await _context.Vehicle.FindAsync(id);
-
-            if (vehicle == null)
-            {
-                return NotFound();
-            }
-
-            return vehicle;
+            return SingleResult.Create(_context.Vehicle.Where(c => c.VehicleId == id));
         }
 
         // PUT: api/Vehicles/5

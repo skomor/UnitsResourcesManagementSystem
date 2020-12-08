@@ -23,11 +23,39 @@ namespace Aut3.Data
         }
 
      
-        public static IQueryable<object> Set ( DbContext _context, Type t)
+      
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            return (IQueryable<object>)_context.GetType().GetMethod("Set").MakeGenericMethod(t).Invoke(_context, null);
-        }
+            base.OnModelCreating(modelBuilder);
+         
+            modelBuilder.Entity<MilitaryUnit>()
+                .HasIndex(u => u.Name)
+                .IsUnique();
+            
+            modelBuilder.Entity<MilitaryUnit>()
+                .HasMany(c => c.Soldiers)
+                .WithOne(e => e.CurrUnit).IsRequired(false).OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Soldier>()
+                .HasOne(c => c.CurrUnit)
+                .WithMany(e => e.Soldiers).IsRequired(false).OnDelete(DeleteBehavior.SetNull);
+
+            
+            
+            modelBuilder.Entity<Miasto>()
+                .HasOne(c => c.Powiat).WithMany(e => e.Miasta).OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Powiat>()
+                .HasOne(c => c.Wojewodztwo).WithMany(e => e.Powiaty).OnDelete(DeleteBehavior.NoAction);
+       
+
+
+        }  
+       
+
+
         public DbSet<Aut3.Models.Soldier> Soldier { get; set; }
+        
 
         public DbSet<Aut3.Models.FamilyMember> FamilyMember { get; set; }
 
@@ -38,6 +66,9 @@ namespace Aut3.Data
         public DbSet<Aut3.Models.RegistrationOfSoldier> RegistrationOfSoldier { get; set; }
 
         public DbSet<Aut3.Models.Vehicle> Vehicle { get; set; }
+        public DbSet<Aut3.Models.Wojewodztwo> Wojewodztwo { get; set; }
+        public DbSet<Aut3.Models.Powiat> Powiat { get; set; }
+        public DbSet<Aut3.Models.Miasto> Miasto { get; set; }
         
         public DbSet<Aut3.Models.RequestsResponsesLog> RequestsResponsesLog { get; set; }
     }

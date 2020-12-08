@@ -11,6 +11,9 @@ import { ApplicationPaths } from './components/api-authorization/ApiAuthorizatio
 
 import './custom.css'
 import SoldierList from "./components/SoldierList";
+import FamilyMembers from "./components/FamilyMembers";
+import MilitaryUnits from "./components/MilitaryUnits";
+import Vehicles from "./components/Vehicles";
 
 export default class App extends Component {
   static displayName = App.name;
@@ -23,6 +26,9 @@ export default class App extends Component {
         <AuthorizeRoute path='/fetch-data' component={FetchData} />
             <AuthorizeRoute path='/ListUsers' component={ListUsers} />
             <Route path='/SoldierList' component={SoldierList} />
+            <Route path='/FamilyMembers' component={FamilyMembers} />
+            <Route path='/MilitaryUnits' component={MilitaryUnits} />
+            <Route path='/VehicleList' component={Vehicles} />
         <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
       </Layout>
     );

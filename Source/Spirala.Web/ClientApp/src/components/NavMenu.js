@@ -1,7 +1,19 @@
-import React, { Component } from 'react';
-import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
-import { Link } from 'react-router-dom';
-import { LoginMenu } from './api-authorization/LoginMenu';
+import React, {Component} from 'react';
+import {
+    Collapse,
+    Container,
+    Navbar,
+    NavbarBrand,
+    NavbarToggler,
+    NavItem,
+    NavLink,
+    UncontrolledDropdown,
+    DropdownMenu,
+    DropdownToggle,
+    DropdownItem
+} from 'reactstrap';
+import {Link} from 'react-router-dom';
+import {LoginMenu} from './api-authorization/LoginMenu';
 import './NavMenu.css';
 import authService from './api-authorization/AuthorizeService';
 
@@ -9,7 +21,7 @@ import authService from './api-authorization/AuthorizeService';
 export class NavMenu extends Component {
     static displayName = NavMenu.name;
 
-    constructor (props) {
+    constructor(props) {
         super(props);
 
         this.toggleNavbar = this.toggleNavbar.bind(this);
@@ -37,7 +49,7 @@ export class NavMenu extends Component {
         });
     }
 
-    toggleNavbar () {
+    toggleNavbar() {
         this.setState({
             collapsed: !this.state.collapsed
         });
@@ -51,19 +63,48 @@ export class NavMenu extends Component {
                     <Container>
                         <NavbarBrand tag={Link} to="/">Aut3</NavbarBrand>
                         <NavbarToggler onClick={this.toggleNavbar} className="mr-2"/>
-                        <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
+                        <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed}
+                                  navbar>
                             <ul className="navbar-nav flex-grow">
                                 {
                                     role && role.includes("Admin") ?
                                         <span>
                                             <NavItem>
-                                                <NavLink tag={Link} className="text-dark" to="/ListUsers">List User</NavLink>
+                                                <NavLink tag={Link} className="text-dark"
+                                                         to="/ListUsers">List User</NavLink>
                                             </NavItem>
                                         </span>
                                         : null}
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
                                 </NavItem>
+                                <UncontrolledDropdown nav inNavbar>
+                                    <DropdownToggle nav caret>
+                                        Administracja Danymi
+                                    </DropdownToggle>
+                                    <DropdownMenu right>
+                                        <DropdownItem>
+                                            <NavLink tag={Link} className="text-dark" to="/ListUsers">Użytkownicy
+                                                aplikacji</NavLink>
+                                        </DropdownItem>
+                                        <DropdownItem>
+                                            <NavLink tag={Link} className="text-dark" to="/SoldierList">Żołnierze i
+                                                rejestracje</NavLink>
+                                        </DropdownItem>
+                                        <DropdownItem>
+                                            <NavLink tag={Link} className="text-dark" to="/FamilyMembers">Osoby
+                                                spokrewnione</NavLink>
+                                        </DropdownItem>
+                                        <DropdownItem>
+                                            <NavLink tag={Link} className="text-dark"
+                                                     to="/MilitaryUnits">Jednostki</NavLink>
+                                        </DropdownItem>
+                                        <DropdownItem>
+                                            <NavLink tag={Link} className="text-dark"
+                                                     to="/VehicleList">Pojazdy</NavLink>
+                                        </DropdownItem>
+                                    </DropdownMenu>
+                                </UncontrolledDropdown>
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/counter">Counter</NavLink>
                                 </NavItem>

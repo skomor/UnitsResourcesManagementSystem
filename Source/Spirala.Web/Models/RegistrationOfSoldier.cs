@@ -11,10 +11,12 @@ namespace Aut3.Models
         public string Notes { get; set; }
         [Column(TypeName="Date")]
         public DateTime DateOfRegistration { get; set; }
+        
+        public Guid MilitaryUnitId { get; set; }
         public MilitaryUnit Unit { get; set; }
-
+        
         public Guid SoldierId { get; set;  }
-        public Soldier Soldier { get; set; }
+        public virtual Soldier Soldier { get; set; }
 
     }
 }

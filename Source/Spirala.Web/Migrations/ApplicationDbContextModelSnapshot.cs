@@ -15,9 +15,9 @@ namespace Aut3.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.9")
+                .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "5.0.0");
 
             modelBuilder.Entity("Aut3.Models.ApplicationUser", b =>
                 {
@@ -32,8 +32,8 @@ namespace Aut3.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
@@ -45,12 +45,12 @@ namespace Aut3.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -68,17 +68,17 @@ namespace Aut3.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
+                        .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex")
+                        .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
@@ -94,9 +94,11 @@ namespace Aut3.Migrations
                         .HasColumnType("Date");
 
                     b.Property<string>("FName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PlaceOfResidence")
@@ -134,24 +136,79 @@ namespace Aut3.Migrations
                     b.ToTable("FamilyRelationToSoldier");
                 });
 
+            modelBuilder.Entity("Aut3.Models.Miasto", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Nazwa")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PowiatID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WojewodztwoID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("PowiatID");
+
+                    b.HasIndex("WojewodztwoID");
+
+                    b.ToTable("Miasto");
+                });
+
             modelBuilder.Entity("Aut3.Models.MilitaryUnit", b =>
                 {
                     b.Property<Guid>("MilitaryUnitId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("City")
+                    b.Property<string>("Miasto")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("PowiatID")
+                        .HasColumnType("int");
 
                     b.Property<string>("UnitNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("MilitaryUnitId");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("PowiatID");
+
                     b.ToTable("MilitaryUnit");
+                });
+
+            modelBuilder.Entity("Aut3.Models.Powiat", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Nazwa")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("WojewodztwoID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("WojewodztwoID");
+
+                    b.ToTable("Powiat");
                 });
 
             modelBuilder.Entity("Aut3.Models.RegistrationOfSoldier", b =>
@@ -163,6 +220,9 @@ namespace Aut3.Migrations
                     b.Property<DateTime>("DateOfRegistration")
                         .HasColumnType("Date");
 
+                    b.Property<Guid>("MilitaryUnitId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
@@ -172,15 +232,12 @@ namespace Aut3.Migrations
                     b.Property<Guid>("SoldierId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("UnitMilitaryUnitId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("RegistrationOfSoldierId");
+
+                    b.HasIndex("MilitaryUnitId");
 
                     b.HasIndex("SoldierId")
                         .IsUnique();
-
-                    b.HasIndex("UnitMilitaryUnitId");
 
                     b.ToTable("RegistrationOfSoldier");
                 });
@@ -226,27 +283,33 @@ namespace Aut3.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CurrUnitMilitaryUnitId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("FName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("MilitaryUnitId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Pesel")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<string>("PlaceOfBirth")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Rank")
+                        .HasColumnType("int");
 
                     b.Property<bool>("Sex")
                         .HasColumnType("bit");
 
                     b.HasKey("SoldierId");
 
-                    b.HasIndex("CurrUnitMilitaryUnitId");
+                    b.HasIndex("MilitaryUnitId");
 
                     b.ToTable("Soldier");
                 });
@@ -258,12 +321,13 @@ namespace Aut3.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Brand")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CarType")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("CurrUnitMilitaryUnitId")
+                    b.Property<Guid>("CurrUnitID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateOfProduction")
@@ -298,44 +362,67 @@ namespace Aut3.Migrations
 
                     b.HasKey("VehicleId");
 
-                    b.HasIndex("CurrUnitMilitaryUnitId");
+                    b.HasIndex("CurrUnitID");
 
                     b.HasIndex("SoldierId");
 
                     b.ToTable("Vehicle");
                 });
 
+            modelBuilder.Entity("Aut3.Models.Wojewodztwo", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Nazwa")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Wojewodztwo");
+                });
+
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.DeviceFlowCodes", b =>
                 {
                     b.Property<string>("UserCode")
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("ClientId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Data")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasMaxLength(50000);
+                        .HasMaxLength(50000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("DeviceCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime?>("Expiration")
                         .IsRequired()
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("SessionId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("SubjectId")
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("UserCode");
 
@@ -350,39 +437,52 @@ namespace Aut3.Migrations
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.PersistedGrant", b =>
                 {
                     b.Property<string>("Key")
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("ClientId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime?>("ConsumedTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Data")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasMaxLength(50000);
+                        .HasMaxLength(50000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime?>("Expiration")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("SessionId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("SubjectId")
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Key");
 
                     b.HasIndex("Expiration");
 
                     b.HasIndex("SubjectId", "ClientId", "Type");
+
+                    b.HasIndex("SubjectId", "SessionId", "Type");
 
                     b.ToTable("PersistedGrants");
                 });
@@ -397,18 +497,18 @@ namespace Aut3.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex")
+                        .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
@@ -419,7 +519,7 @@ namespace Aut3.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -443,7 +543,7 @@ namespace Aut3.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -465,12 +565,12 @@ namespace Aut3.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -507,12 +607,12 @@ namespace Aut3.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -535,39 +635,99 @@ namespace Aut3.Migrations
                         .HasForeignKey("SoldierId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("FamilyMember");
+
+                    b.Navigation("Soldier");
+                });
+
+            modelBuilder.Entity("Aut3.Models.Miasto", b =>
+                {
+                    b.HasOne("Aut3.Models.Powiat", "Powiat")
+                        .WithMany("Miasta")
+                        .HasForeignKey("PowiatID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Aut3.Models.Wojewodztwo", "Wojewodztwo")
+                        .WithMany()
+                        .HasForeignKey("WojewodztwoID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Powiat");
+
+                    b.Navigation("Wojewodztwo");
+                });
+
+            modelBuilder.Entity("Aut3.Models.MilitaryUnit", b =>
+                {
+                    b.HasOne("Aut3.Models.Powiat", "Powiat")
+                        .WithMany()
+                        .HasForeignKey("PowiatID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Powiat");
+                });
+
+            modelBuilder.Entity("Aut3.Models.Powiat", b =>
+                {
+                    b.HasOne("Aut3.Models.Wojewodztwo", "Wojewodztwo")
+                        .WithMany("Powiaty")
+                        .HasForeignKey("WojewodztwoID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Wojewodztwo");
                 });
 
             modelBuilder.Entity("Aut3.Models.RegistrationOfSoldier", b =>
                 {
+                    b.HasOne("Aut3.Models.MilitaryUnit", "Unit")
+                        .WithMany("RegistrationOfSoldiers")
+                        .HasForeignKey("MilitaryUnitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Aut3.Models.Soldier", "Soldier")
                         .WithOne("RegistrationOfSoldier")
                         .HasForeignKey("Aut3.Models.RegistrationOfSoldier", "SoldierId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Aut3.Models.MilitaryUnit", "Unit")
-                        .WithMany("RegistrationOfSoldiers")
-                        .HasForeignKey("UnitMilitaryUnitId");
+                    b.Navigation("Soldier");
+
+                    b.Navigation("Unit");
                 });
 
             modelBuilder.Entity("Aut3.Models.Soldier", b =>
                 {
                     b.HasOne("Aut3.Models.MilitaryUnit", "CurrUnit")
                         .WithMany("Soldiers")
-                        .HasForeignKey("CurrUnitMilitaryUnitId");
+                        .HasForeignKey("MilitaryUnitId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("CurrUnit");
                 });
 
             modelBuilder.Entity("Aut3.Models.Vehicle", b =>
                 {
                     b.HasOne("Aut3.Models.MilitaryUnit", "CurrUnit")
                         .WithMany("Vehicles")
-                        .HasForeignKey("CurrUnitMilitaryUnitId");
+                        .HasForeignKey("CurrUnitID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Aut3.Models.Soldier", "Owner")
                         .WithMany("OwnedVehicles")
                         .HasForeignKey("SoldierId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("CurrUnit");
+
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -619,6 +779,39 @@ namespace Aut3.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Aut3.Models.FamilyMember", b =>
+                {
+                    b.Navigation("FamilyRelationToSoldiers");
+                });
+
+            modelBuilder.Entity("Aut3.Models.MilitaryUnit", b =>
+                {
+                    b.Navigation("RegistrationOfSoldiers");
+
+                    b.Navigation("Soldiers");
+
+                    b.Navigation("Vehicles");
+                });
+
+            modelBuilder.Entity("Aut3.Models.Powiat", b =>
+                {
+                    b.Navigation("Miasta");
+                });
+
+            modelBuilder.Entity("Aut3.Models.Soldier", b =>
+                {
+                    b.Navigation("FamilyRelationToSoldiers");
+
+                    b.Navigation("OwnedVehicles");
+
+                    b.Navigation("RegistrationOfSoldier");
+                });
+
+            modelBuilder.Entity("Aut3.Models.Wojewodztwo", b =>
+                {
+                    b.Navigation("Powiaty");
                 });
 #pragma warning restore 612, 618
         }
