@@ -5,12 +5,23 @@ import 'devextreme/dist/css/dx.light.css';
 import 'whatwg-fetch';
 import $ from 'jquery';
 
-import DataGrid, {Column, Editing, Form, Lookup, Paging, RequiredRule, SearchPanel} from 'devextreme-react/data-grid';
+import DataGrid, {
+    Column,
+    Editing,
+    FilterRow,
+    Form,
+    Lookup,
+    Paging,
+    RequiredRule,
+    SearchPanel
+} from 'devextreme-react/data-grid';
 import ODataStore from 'devextreme/data/odata/store';
 import AllOdataStores from "./DataSources/AllOdataStores";
 import {ranksE} from "./DataSources/RanksEnum";
 import {AsyncRule, Item} from "devextreme-react/form";
-
+import {FuelTypeEnum} from "./DataSources/FuelTypeEnum";
+import {TransmissionGearTypeEnum} from "./DataSources/TransmissionGearTypeEnum";
+import {VehicleTypeEnum} from "./DataSources/VehicleTypeEnum";
 
 
 
@@ -21,7 +32,7 @@ class Vehicles extends React.Component {
 
         this.state = {
             vehiclesSource: AllOdataStores.Vehicles(),
-         
+
         }
         this.onRowUpdating = this.onRowUpdating.bind(this);
 
@@ -45,7 +56,6 @@ class Vehicles extends React.Component {
     }
 
 
-
     render() {
         const {vehiclesSource} = this.state;
 
@@ -59,11 +69,12 @@ class Vehicles extends React.Component {
                     onRowUpdating={this.onRowUpdating}
 
                 >
+                    <FilterRow visible={true} />
                     <SearchPanel visible={true}
                                  width={240}
-                                 placeholder="Wyszukaj..." />
-                                 
-                    <Paging defaultPageSize={20} />
+                                 placeholder="Wyszukaj..."/>
+
+                    <Paging defaultPageSize={20}/>
                     <Editing
                         refreshMode="full"
                         onRowUpdating={this.onRowUpdating}
@@ -73,6 +84,7 @@ class Vehicles extends React.Component {
                         allowUpdating={true}
                         mode="form"
                     >
+               
                         <Form>
                             <Item itemType="group" colCount={2} colSpan={2}>
                                 <Item dataField="Vin"/>
@@ -84,7 +96,6 @@ class Vehicles extends React.Component {
                                 <Item dataField="FuelConfig"/>
                                 <Item dataField="DateOfProduction"/>
 
-                               
 
                             </Item>
                         </Form>
@@ -93,17 +104,25 @@ class Vehicles extends React.Component {
                     <Column dataField="Brand" caption="Marka" width={100}/>
                     <Column dataField="Model" width={100}/>
                     <Column dataField="LicensePlate" caption="Rejestracja"/>
-                    <Column dataField="CarType" caption="Typ"/>
-                    <Column dataField="TransmissionConfig" caption="Skrzynia"/>
-                    <Column dataField="FuelConfig" caption="Paliwo"/>
+                    <Column dataField="CarType" caption="Typ">
+                        <Lookup dataSource={VehicleTypeEnum} valueExpr="id" displayExpr="name"/>
+                    </Column>
+                    <Column dataField="TransmissionConfig" caption="Skrzynia">
+                        <Lookup dataSource={TransmissionGearTypeEnum} valueExpr="id" displayExpr="name"/>
+                    </Column>
+                    <Column dataField="FuelConfig" caption="Paliwo">
+                        <Lookup dataSource={FuelTypeEnum} valueExpr="id" displayExpr="name"/>
+                    </Column>
                     <Column dataField="DateOfProduction" caption="Data Produkcji"/>
                     <Column dataField="WeightKg" caption="Waga[kg]"/>
                     <Column dataField="PowerOutputHP" caption="Moc[km]"/>
                     <Column dataField="CurrUnitID" caption="Aktualna Jednosta">
-                        <Lookup dataSource={AllOdataStores.militaryUnitForLookUp()} valueExpr="MilitaryUnitId" displayExpr="Name" />
+                        <Lookup dataSource={AllOdataStores.militaryUnitForLookUp()} valueExpr="MilitaryUnitId"
+                                displayExpr="Name"/>
                     </Column>
                     <Column dataField="SoldierId" caption="Właściciel">
-                        <Lookup dataSource={AllOdataStores.soldierForLookUp()} valueExpr="SoldierId" displayExpr="LName" />
+                        <Lookup dataSource={AllOdataStores.soldierForLookUp()} valueExpr="SoldierId"
+                                displayExpr="LName"/>
                     </Column>
 
                 </DataGrid>

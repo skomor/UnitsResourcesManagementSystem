@@ -8,7 +8,7 @@ import $ from 'jquery';
 import {Button, Editing, Lookup} from 'devextreme-react/data-grid';
 import CustomStore from 'devextreme/data/custom_store';
 import AllOdataStores from "./DataSources/AllOdataStores";
-import DataGrid, { Column, FilterRow, HeaderFilter, SearchPanel } from 'devextreme-react/data-grid';
+import DataGrid, {Column, FilterRow, HeaderFilter, SearchPanel} from 'devextreme-react/data-grid';
 import {ranksE} from "./DataSources/RanksEnum";
 
 import DataSource from "devextreme/data/data_source";
@@ -40,11 +40,11 @@ class SoldierList extends React.Component {
             rankLookup: ranksE,
             militaryUnit: AllOdataStores.militaryUnitForLookUp(),
             soldiersSource: AllOdataStores.soldiersStore("RegistrationOfSoldier,CurrUnit"),
-     /*       customersData: new CustomStore({
-                key: 'Value',
-                loadMode: 'raw',
-                load: () => this.sendRequest(`https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi/CustomersLookup`)
-            }),*/
+            /*       customersData: new CustomStore({
+                       key: 'Value',
+                       loadMode: 'raw',
+                       load: () => this.sendRequest(`https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi/CustomersLookup`)
+                   }),*/
             registrationsOfSoldierData: AllOdataStores.registrationOfSoldiersStore()
         }
         this.onRowUpdating = this.onRowUpdating.bind(this);
@@ -135,7 +135,7 @@ class SoldierList extends React.Component {
 
 
     render() {
-        const {soldiersSource, militaryUnit ,rankLookup} = this.state;
+        const {soldiersSource, militaryUnit, rankLookup} = this.state;
 
         return (
             <DataGrid
@@ -146,11 +146,11 @@ class SoldierList extends React.Component {
                 mode="cell"
                 showBorders={true}
             >
-               {/* <HeaderFilter visible={this.state.showHeaderFilter} />*/}
+                {/* <HeaderFilter visible={this.state.showHeaderFilter} />*/}
 
                 <SearchPanel visible={true}
                              width={240}
-                             placeholder="Wyszukaj..." />
+                             placeholder="Wyszukaj..."/>
                 <Editing
                     refreshMode="full"
                     mode="cell"
@@ -159,37 +159,36 @@ class SoldierList extends React.Component {
                     allowUpdating={true}
                 />
                 <Column dataField="Rank" caption={"Stopień"}>
-                    <Lookup dataSource={ rankLookup}
+                    <Lookup dataSource={rankLookup}
                             displayExpr={"name"} valueExpr={"id"}
                     />
                 </Column>
-             
+
                 <Column dataField="FName" caption={"Imię"}>
                 </Column>
-                <Column dataField="LName" caption={"Nazwisko"} >
+                <Column dataField="LName" caption={"Nazwisko"}>
                 </Column>
                 <Column dataField="Pesel">
                 </Column>
 
-     <Column dataField="PlaceOfBirth">
+                <Column dataField="PlaceOfBirth">
                 </Column>
-
 
 
                 <Column dataField="RegistrationOfSoldier.Place" caption={"Miejsce rejestracji"}>
                 </Column>
                 <Column dataField="RegistrationOfSoldier.Notes" caption={"Notatki z rej"}>
-                </Column> 
+                </Column>
                 <Column dataField="RegistrationOfSoldier.DateOfRegistration" caption={"Data rej"}>
-                </Column> 
-              
+                </Column>
+
                 <Column dataField="RegistrationOfSoldier.MilitaryUnitId" caption={"Jednostka rej"}>
-                    <Lookup dataSource={ militaryUnit}
+                    <Lookup dataSource={militaryUnit}
                             displayExpr={"Name"} valueExpr={"MilitaryUnitId"}
                     />
                 </Column>
                 <Column type="buttons">
-                    <Button name="delete" text={"Usuń"} />
+                    <Button name="delete" text={"Usuń"}/>
                 </Column>
 
             </DataGrid>

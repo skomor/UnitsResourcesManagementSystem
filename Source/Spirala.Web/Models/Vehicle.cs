@@ -19,9 +19,14 @@ namespace Aut3.Models
         public string Brand  { get; set; }
         public string Model  { get; set; }
         public string LicensePlate  { get; set; }
-        public VehicleTypeEnum CarType { get; set; }
-        public TransmissionGearTypeEnum  TransmissionConfig { get; set; }
-        public FuelTypeEnum FuelConfig { get; set; }
+        [Range(0, 9)]
+        public int CarType { get; set; }
+        [Range(0, 1)]
+
+        public int  TransmissionConfig { get; set; }
+        [Range(0, 6)]
+
+        public int FuelConfig { get; set; }
         [Column(TypeName="Date")]
         public DateTime DateOfProduction { get; set; }
         

@@ -12,6 +12,7 @@ namespace Aut3.Models
         */
         public Guid MilitaryUnitId { get; set; }
         [Required]
+        //jest juz unique w dbContext
         public string Name{ get; set; }
         [Required]
         public string UnitNumber{ get; set; }

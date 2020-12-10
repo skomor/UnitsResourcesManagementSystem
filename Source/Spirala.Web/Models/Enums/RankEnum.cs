@@ -17,8 +17,6 @@ starszy_szeregowy,
    młodszy_chorąży,
         chorąży,
         starszy_chorąży,
-
- 
         starszy_chorąży_sztabowy,
         podporucznik,
         porucznik,
@@ -38,21 +36,13 @@ starszy_szeregowy,
         bosmanmat,
         bosman,
       starszy_bosman,
-
-        młodszy_chorąży_marynarki,
+      młodszy_chorąży_marynarki,
         chorąży_marynarki,
-
-  
         starszy_chorąży_marynarki,
-
         starszy_chorąży_sztabowy_marynarki,
-
         podporucznik_marynarki,
-
         porucznik_marynarki,
         kapitan_marynarki,
-
-
         komandor_podporucznik,
   komandor_porucznik,
         komandor,

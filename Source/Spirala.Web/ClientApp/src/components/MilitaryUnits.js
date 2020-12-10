@@ -24,7 +24,7 @@ export default class MilitaryUnits extends React.Component {
             woje: AllOdataStores.wojewodztwaForLookUp()
         }
         this.onRowUpdating = this.onRowUpdating.bind(this);
-        this.sendRequest = this.sendRequest.bind(this);
+      //  this.sendRequest = this.sendRequest.bind(this);
         this.asyncValidation = this.asyncValidation.bind(this);
         this.getDataAxios = this.getDataAxios.bind(this);
 
@@ -124,10 +124,10 @@ export default class MilitaryUnits extends React.Component {
         );
     }
 
-     sendRequest(value) {
-        const validEmail = 'test@dx-email.com';
+ /*    sendRequest(value) {
+       
         return new Promise(this.getDataAxios(value));
-    }
+    }*/
     async getDataAxios(value){
         
         const response = await fetch('https://localhost:44349/odata/Miasta', {
