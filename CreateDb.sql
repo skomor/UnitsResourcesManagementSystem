@@ -139,3 +139,7 @@ BEGIN
   SET @Curr2 = @Curr2 +1
 END;
   Drop table if exists #testo2;
+
+    INSERT INTO MilitaryUnit(PowiatID,MilitaryUnitId,Name,UnitNumber,Miasto) VALUES(2,'00000000-0000-0000-0000-000000000000', '','','')
+
+	;
