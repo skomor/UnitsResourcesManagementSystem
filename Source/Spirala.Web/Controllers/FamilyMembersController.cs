@@ -9,6 +9,7 @@ using Aut3.Data;
 using Aut3.Models;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Aut3.Controllers
 {
@@ -58,7 +59,7 @@ namespace Aut3.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         [ODataRoute("FamilyMembers/{id}")]
-
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutFamilyMember(Guid id, FamilyMember familyMember)
         {
             if (id != familyMember.FamilyMemberId)
@@ -92,6 +93,7 @@ namespace Aut3.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         [ODataRoute("FamilyMembers")]
+        [Authorize(Roles = "Admin")]
 
         public async Task<ActionResult<FamilyMember>> PostFamilyMember(FamilyMember familyMember)
         {
@@ -104,6 +106,7 @@ namespace Aut3.Controllers
         // DELETE: api/FamilyMembers/5
         [HttpDelete("{id}")]
         [ODataRoute("FamilyMembers/{id}")]
+        [Authorize(Roles = "Admin")]
 
         public async Task<ActionResult<FamilyMember>> DeleteFamilyMember(Guid id)
         {

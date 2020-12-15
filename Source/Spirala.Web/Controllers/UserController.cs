@@ -37,6 +37,8 @@ namespace Aut3.Controllers
 
         // GET: api/<UserController>
         [HttpGet]
+        [Authorize(Roles = "Admin")]
+
         public IEnumerable<ApplicationUser> Get()
         {
             this.Users = userManager.Users;
@@ -46,6 +48,8 @@ namespace Aut3.Controllers
 
         // GET api/<UserController>/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IEnumerable<string>> Get(string id)
         {
             IEnumerable<string> empty = new String[0];
@@ -62,12 +66,16 @@ namespace Aut3.Controllers
 
         // POST api/<UserController>
         [HttpPost]
+        [Authorize(Roles = "Admin")]
+
         public void Post([FromBody] string value)
         {
         }
 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Put(string id, [FromBody] string[] roles)
         {
             //var newRole = pb.newRole;
@@ -123,6 +131,8 @@ namespace Aut3.Controllers
 
         // DELETE api/<UserController>/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+
         public void Delete(string id)
         {
         }

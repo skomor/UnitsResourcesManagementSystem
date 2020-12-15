@@ -208,10 +208,14 @@ class AllOdataStores {
                 toUrl += ` or MilitaryUnitId eq ${unitIds[i]}`
 
             }
+            var wholeUrl = toExpand ? `${URL}/Soldiers?$expand=${toExpand}`  :
+                `${URL}/Soldiers?` ;
+            wholeUrl = toExpand && unitIds.length !== 0 ? wholeUrl + `&` : wholeUrl;
+            wholeUrl = unitIds.length !== 0 ? (wholeUrl +`$filter=` + toUrl ): wholeUrl;
             return new CustomStore({
                 key: 'SoldierId',
 
-                load: () => this.sendRequest(toExpand ? `${URL}/Soldiers?$expand=${toExpand}&` : `${URL}/Soldiers?` + `$filter=` + toUrl)
+                load: () => this.sendRequest(wholeUrl)
             });
         }
         
@@ -224,10 +228,13 @@ class AllOdataStores {
                 toUrl += ` or CurrUnitID eq ${unitIds[i]}`
 
             }
+            var wholeUrl = unitIds.length !== 0 ? (`${URL}/Vehicles?$filter=` + toUrl ): `${URL}/Vehicles?`;
+            
+            
             return new CustomStore({
                 key: 'VehicleId',
 
-                load: () => this.sendRequest(toExpand ? `${URL}/Vehicles?$expand=${toExpand}&` : `${URL}/Vehicles?` + `$filter=` + toUrl)
+                load: () => this.sendRequest(wholeUrl)
             });
         }
         

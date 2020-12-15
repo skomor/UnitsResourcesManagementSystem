@@ -12,6 +12,7 @@ import DataGrid, {Column, FilterRow, HeaderFilter, SearchPanel} from 'devextreme
 import {ranksE} from "../DataSources/RanksEnum";
 
 import DataSource from "devextreme/data/data_source";
+import {Format} from "devextreme-react/filter-builder";
 
 /*const productsStore = new ODataStore({
     url: 'https://localhost:44349/odata/Soldiers',
@@ -116,22 +117,16 @@ class SoldierListForUser extends React.Component {
                 id="SoldierId"
                 dataSource={soldiersSource}
                 onRowUpdating={this.onRowUpdating}
-                allowDeleting={true}
                 mode="cell"
                 showBorders={true}
             >
+                <FilterRow visible={true} />
                 {/* <HeaderFilter visible={this.state.showHeaderFilter} />*/}
 
                 <SearchPanel visible={true}
                              width={240}
                              placeholder="Wyszukaj..."/>
-                <Editing
-                    refreshMode="full"
-                    mode="cell"
-                    allowAdding={true}
-                    allowDeleting={true}
-                    allowUpdating={true}
-                />
+            
                 <Column dataField="Rank" caption={"Stopień"}>
                     <Lookup dataSource={rankLookup}
                             displayExpr={"name"} valueExpr={"id"}
@@ -153,7 +148,9 @@ class SoldierListForUser extends React.Component {
                 </Column>
                 <Column dataField="RegistrationOfSoldier.Notes" caption={"Notatki z rej"}>
                 </Column>
-                <Column dataField="RegistrationOfSoldier.DateOfRegistration" caption={"Data rej"}>
+                <Column dataField="RegistrationOfSoldier.DateOfRegistration" caption={"Data rej"}  dataType= 'date'
+                format = 'dd/MM/yyyy' selectedFilterOperation={'between'} >
+                
                 </Column>
 
                 <Column dataField="RegistrationOfSoldier.MilitaryUnitId" caption={"Jednostka rej"}>
@@ -161,10 +158,7 @@ class SoldierListForUser extends React.Component {
                             displayExpr={"Name"} valueExpr={"MilitaryUnitId"}
                     />
                 </Column>
-                <Column type="buttons">
-                    <Button name="delete" text={"Usuń"}/>
-                </Column>
-
+       
             </DataGrid>
         );
     }

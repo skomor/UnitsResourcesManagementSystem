@@ -75,7 +75,11 @@ class FamilyMembersForUser extends React.Component {
                             dataSource={familyMembers}
                             noDataText={"Nie znaleziono nikogo z rodziny tego żołnierza"}
                         >
-                            
+                            <Column dataField="FName" caption="Imie"/>
+                            <Column dataField="LName" caption="Nazwisko"/>
+                            <Column dataField="Sex" caption="Płeć"/>
+                            <Column dataField="PlaceOfResidence" caption="Miejsce Zamieszkania"/>
+                            <Column dataField="DateOfBirth" caption="Data urodzenia"/>
 
 
                         </DataGrid>

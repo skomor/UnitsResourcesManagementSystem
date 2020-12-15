@@ -69,7 +69,7 @@ export class NavMenu extends Component {
                         <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed}
                                   navbar>
                             <ul className="navbar-nav flex-grow">
-                                {
+                             {/*   {
                                     role && role.includes("Admin") ?
                                         <span>
                                             <NavItem>
@@ -77,10 +77,12 @@ export class NavMenu extends Component {
                                                          to="/ListUsers">List User</NavLink>
                                             </NavItem>
                                         </span>
-                                        : null}
+                                        : null}*/}
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
                                 </NavItem>
+                                {
+                                    role && role.includes("Admin") ?
                                 <UncontrolledDropdown nav inNavbar>
                                     <DropdownToggle nav caret>
                                         Administracja Danymi
@@ -107,7 +109,7 @@ export class NavMenu extends Component {
                                                      to="/VehicleList">Pojazdy</NavLink>
                                         </DropdownItem>
                                     </DropdownMenu>
-                                </UncontrolledDropdown>
+                                </UncontrolledDropdown> :""}
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/FamilyMembersForUser">Rodziny żołnierzy</NavLink>
                                 </NavItem>
@@ -117,12 +119,12 @@ export class NavMenu extends Component {
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/VehiclesForUser">Pojazdy</NavLink>
                                 </NavItem>
-                                <NavItem>
+                               {/* <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/fetch-data">Fetch data</NavLink>
                                 </NavItem>
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/SoldierList">List Soldier</NavLink>
-                                </NavItem>
+                                </NavItem>*/}
                                 <LoginMenu>
                                 </LoginMenu>
                             </ul>

@@ -9,6 +9,7 @@ using Aut3.Data;
 using Aut3.Models;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Aut3.Controllers
 {
@@ -45,6 +46,8 @@ namespace Aut3.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         [ODataRoute("Wojewodztwa/{id}")]       
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> PutWojewodztwo(int id, Wojewodztwo wojewodztwo)
         {
             if (id != wojewodztwo.ID)
@@ -77,6 +80,8 @@ namespace Aut3.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [ODataRoute("Wojewodztwa")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<ActionResult<Wojewodztwo>> PostWojewodztwo(Wojewodztwo wojewodztwo)
         {
             _context.Wojewodztwo.Add(wojewodztwo);
@@ -88,6 +93,8 @@ namespace Aut3.Controllers
         // DELETE: api/Wojewodztwo/5
         [HttpDelete("{id}")]
         [ODataRoute("Wojewodztwa/{id}")]
+        [Authorize(Roles = "Admin")]
+
 
 
         public async Task<IActionResult> DeleteWojewodztwo(int id)

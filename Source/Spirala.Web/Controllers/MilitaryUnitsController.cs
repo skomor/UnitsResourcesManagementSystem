@@ -9,6 +9,7 @@ using Aut3.Data;
 using Aut3.Models;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Aut3.Controllers
 {
@@ -50,6 +51,7 @@ namespace Aut3.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         [ODataRoute("MilitaryUnits/{id}")]
+        [Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> PutMilitaryUnit(Guid id, MilitaryUnit militaryUnit)
         {
@@ -84,6 +86,7 @@ namespace Aut3.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         [ODataRoute("MilitaryUnits")]
+        [Authorize(Roles = "Admin")]
 
         public async Task<ActionResult<MilitaryUnit>> PostMilitaryUnit(MilitaryUnit militaryUnit)
         {
@@ -96,6 +99,7 @@ namespace Aut3.Controllers
         // DELETE: api/MilitaryUnits/5
         [HttpDelete("{id}")]
         [ODataRoute("MilitaryUnits/{id}")]
+        [Authorize(Roles = "Admin")]
 
         public async Task<ActionResult<MilitaryUnit>> DeleteMilitaryUnit(Guid id)
         {

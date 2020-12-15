@@ -74,32 +74,8 @@ class VehiclesForUser extends React.Component {
                                  width={240}
                                  placeholder="Wyszukaj..."/>
 
-                    <Paging defaultPageSize={20}/>
-                    <Editing
-                        refreshMode="full"
-                        onRowUpdating={this.onRowUpdating}
-
-                        allowAdding={true}
-                        allowDeleting={true}
-                        allowUpdating={true}
-                        mode="form"
-                    >
-               
-                        <Form>
-                            <Item itemType="group" colCount={2} colSpan={2}>
-                                <Item dataField="Vin"/>
-                                <Item dataField="Brand"/>
-                                <Item dataField="Model"/>
-                                <Item dataField="LicensePlate"/>
-                                <Item dataField="CarType"/>
-                                <Item dataField="TransmissionConfig"/>
-                                <Item dataField="FuelConfig"/>
-                                <Item dataField="DateOfProduction"/>
-
-
-                            </Item>
-                        </Form>
-                    </Editing>
+                    <Paging defaultPageSize={30}/>
+                   
                     <Column dataField="Vin" caption="Vin:" width={105}/>
                     <Column dataField="Brand" caption="Marka" width={100}/>
                     <Column dataField="Model" width={100}/>
@@ -113,7 +89,8 @@ class VehiclesForUser extends React.Component {
                     <Column dataField="FuelConfig" caption="Paliwo">
                         <Lookup dataSource={FuelTypeEnum} valueExpr="id" displayExpr="name"/>
                     </Column>
-                    <Column dataField="DateOfProduction" caption="Data Produkcji"/>
+                    <Column dataField="DateOfProduction" caption="Data Produkcji"   dataType= 'date'
+                            format = 'dd/MM/yyyy' selectedFilterOperation={'between'} />
                     <Column dataField="WeightKg" caption="Waga[kg]"/>
                     <Column dataField="PowerOutputHP" caption="Moc[km]"/>
                     <Column dataField="CurrUnitID" caption="Aktualna Jednosta">

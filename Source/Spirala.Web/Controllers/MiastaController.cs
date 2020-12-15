@@ -9,6 +9,7 @@ using Aut3.Data;
 using Aut3.Models;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Aut3.Controllers
 {
@@ -59,6 +60,7 @@ namespace Aut3.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         [ODataRoute("Miasta/{id}")]       
+        [Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> PutMiasto(int id, Miasto miasto)
         {
@@ -92,6 +94,7 @@ namespace Aut3.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [ODataRoute("Miasta")]
+        [Authorize(Roles = "Admin")]
 
         public async Task<ActionResult<Miasto>> PostMiasto(Miasto miasto)
         {
@@ -104,6 +107,7 @@ namespace Aut3.Controllers
         // DELETE: api/Miasta/5
         [HttpDelete("{id}")]
         [ODataRoute("Miasta/{id}")]
+        [Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> DeleteMiasto(int id)
         {

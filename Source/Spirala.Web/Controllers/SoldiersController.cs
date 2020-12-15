@@ -49,6 +49,8 @@ namespace Aut3.Controllers
 
         [HttpPut("{id}")]
         [ODataRoute("Soldiers/{id}")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> PutSoldier(Guid id, Soldier soldier)
         {
             
@@ -121,6 +123,8 @@ namespace Aut3.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         [ODataRoute("Soldiers")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<ActionResult<Soldier>> PostSoldier(Soldier soldier)
         {
             await _context.Soldier.AddAsync(soldier);

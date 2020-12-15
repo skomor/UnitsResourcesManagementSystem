@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Route} from 'react-router';
+import {Route } from 'react-router';
 import {Layout} from './components/Layout';
 import {Home} from './components/Home';
 import {FetchData} from './components/FetchData';
@@ -19,6 +19,7 @@ import VehiclesForUser from "./components/NormalUserComponents/VehiclesForUser";
 import FamilyMembersForUser from "./components/NormalUserComponents/FamilyMembersForUser";
 import SoldierListForUser from "./components/NormalUserComponents/SoldierListForUser";
 import AllOdataStores from "./components/DataSources/AllOdataStores";
+import {Redirect} from "react-router-dom";
 
 export default class App extends Component {
     static displayName = App.name;
@@ -54,15 +55,15 @@ export default class App extends Component {
             <Layout>
                 <Route exact path='/' component={() => <Home passedProp={this.state.role}/>}/>
                 <Route path='/counter' component={Counter}/>
-                <AuthorizeRoute path='/fetch-data' component={FetchData}/>
-                <AuthorizeRoute path='/ListUsers' component={ListUsers}/>
-                <Route path='/SoldierList' component={SoldierList}/>
-                <Route path='/FamilyMembers' component={FamilyMembers}/>
-                <Route path='/MilitaryUnits' component={MilitaryUnits}/>
-                <Route path='/VehicleList' component={Vehicles}/>
-                <Route path='/VehiclesForUser' component={() => <VehiclesForUser passedRoles={this.state.role} passedUnitIds={this.state.unitIds}/>}/>
-                <Route path='/SoldierListForUser' component={() => <SoldierListForUser passedRoles={this.state.role} passedUnitIds={this.state.unitIds}/>}/>
-                <Route path='/FamilyMembersForUser' component={() => <FamilyMembersForUser passedRoles={this.state.role} passedUnitIds={this.state.unitIds}/>}/>
+                <AuthorizeRoute path='/fetch-data' component={FetchData} />
+                <AuthorizeRoute path='/ListUsers' component={() => this.state.role && this.state.role.includes("Admin") ? <ListUsers/> : <h1>Brak uprawnień do tej strony</h1>}/>
+                <AuthorizeRoute path='/SoldierList' component={() => this.state.role && this.state.role.includes("Admin") ? <SoldierList/> : <h1>Brak uprawnień do tej strony</h1>}/>
+                <AuthorizeRoute path='/FamilyMembers' component={() => this.state.role && this.state.role.includes("Admin") ? <FamilyMembers/> : <h1>Brak uprawnień do tej strony</h1>}/>
+                <AuthorizeRoute path='/MilitaryUnits' component={() => this.state.role && this.state.role.includes("Admin") ? <MilitaryUnits/> : <h1>Brak uprawnień do tej strony</h1>}/>
+                <AuthorizeRoute path='/VehicleList' component={() => this.state.role && this.state.role.includes("Admin") ? <Vehicles/> : <h1>Brak uprawnień do tej strony</h1>}/>
+                <AuthorizeRoute path='/VehiclesForUser' component={() => <VehiclesForUser passedRoles={this.state.role} passedUnitIds={this.state.unitIds}/>}/>
+                <AuthorizeRoute path='/SoldierListForUser' component={() => <SoldierListForUser passedRoles={this.state.role} passedUnitIds={this.state.unitIds}/>}/>
+                <AuthorizeRoute path='/FamilyMembersForUser' component={() => <FamilyMembersForUser passedRoles={this.state.role} passedUnitIds={this.state.unitIds}/>}/>
                 <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes}/>
             </Layout>
         );

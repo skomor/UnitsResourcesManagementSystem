@@ -9,6 +9,7 @@ using Aut3.Data;
 using Aut3.Models;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Aut3.Controllers
 {
@@ -48,6 +49,8 @@ namespace Aut3.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         [ODataRoute("Vehicles/{id}")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> PutVehicle(Guid id, Vehicle vehicle)
         {
             if (id != vehicle.VehicleId)
@@ -81,6 +84,8 @@ namespace Aut3.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         [ODataRoute("Vehicles")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<ActionResult<Vehicle>> PostVehicle(Vehicle vehicle)
         {
             _context.Vehicle.Add(vehicle);
@@ -92,6 +97,8 @@ namespace Aut3.Controllers
         // DELETE: api/Vehicles/5
         [HttpDelete("{id}")]
         [ODataRoute("Vehicles/{id}")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<ActionResult<Vehicle>> DeleteVehicle(Guid id)
         {
             var vehicle = await _context.Vehicle.FindAsync(id);

@@ -9,6 +9,7 @@ using Aut3.Data;
 using Aut3.Models;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Aut3.Controllers
 {
@@ -52,6 +53,8 @@ namespace Aut3.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         [ODataRoute("RegistrationOfSoldiers/{id}")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> PutRegistrationOfSoldier(Guid id, RegistrationOfSoldier registrationOfSoldier)
         {
             if (id != registrationOfSoldier.RegistrationOfSoldierId)
@@ -85,6 +88,7 @@ namespace Aut3.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         [ODataRoute("RegistrationOfSoldiers")]
+        [Authorize(Roles = "Admin")]
 
         public async Task<ActionResult<RegistrationOfSoldier>> PostRegistrationOfSoldier(RegistrationOfSoldier registrationOfSoldier)
         {
@@ -97,6 +101,8 @@ namespace Aut3.Controllers
         // DELETE: api/RegistrationOfSoldiers/5
         [HttpDelete("{id}")]
         [ODataRoute("RegistrationOfSoldiers/{id}")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<ActionResult<RegistrationOfSoldier>> DeleteRegistrationOfSoldier(Guid id)
         {
             var registrationOfSoldier = await _context.RegistrationOfSoldier.FindAsync(id);
