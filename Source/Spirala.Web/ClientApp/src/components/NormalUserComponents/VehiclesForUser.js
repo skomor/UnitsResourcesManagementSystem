@@ -31,7 +31,7 @@ class VehiclesForUser extends React.Component {
 
 
         this.state = {
-            vehiclesSource: AllOdataStores.Vehicles(),
+            vehiclesSource: AllOdataStores.vehicleStoreForUser(null,props.passedUnitIds),
 
         }
         this.onRowUpdating = this.onRowUpdating.bind(this);

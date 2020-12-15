@@ -211,7 +211,23 @@ class AllOdataStores {
             return new CustomStore({
                 key: 'SoldierId',
 
-                load: () => this.sendRequest(`${URL}/Soldiers?$expand=${toExpand}` + `&$filter=` + toUrl)
+                load: () => this.sendRequest(toExpand ? `${URL}/Soldiers?$expand=${toExpand}&` : `${URL}/Soldiers?` + `$filter=` + toUrl)
+            });
+        }
+        
+    }
+    static vehicleStoreForUser(toExpand, unitIds) {
+        if(unitIds) {
+            var toUrl = `CurrUnitID eq ${unitIds[0]}`;
+            for (let i = 1; i < unitIds.length; i++) {
+
+                toUrl += ` or CurrUnitID eq ${unitIds[i]}`
+
+            }
+            return new CustomStore({
+                key: 'VehicleId',
+
+                load: () => this.sendRequest(toExpand ? `${URL}/Vehicles?$expand=${toExpand}&` : `${URL}/Vehicles?` + `$filter=` + toUrl)
             });
         }
         

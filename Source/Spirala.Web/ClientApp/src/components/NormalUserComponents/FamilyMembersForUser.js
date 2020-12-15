@@ -20,7 +20,7 @@ class FamilyMembersForUser extends React.Component {
     
         this.state = {
             rankLookup: ranksE,
-            soldiersSource: AllOdataStores.soldiersStore(),
+            soldiersSource: AllOdataStores.soldiersStoreForUser(null,props.passedUnitIds),
             familyMembers: AllOdataStores.familyMembers(),
         }
         this.onSelectionChanged = this.onSelectionChanged.bind(this);
