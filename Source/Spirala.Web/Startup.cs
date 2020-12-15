@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
@@ -171,6 +172,24 @@ namespace Aut3
         {
             var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var UserManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var context = serviceProvider.GetService<ApplicationDbContext>();
+
+            if (context != null){
+                var units = context.MilitaryUnit.ToList();
+                foreach (var unit in units){
+                    bool roleExist = await RoleManager.RoleExistsAsync(unit.Name);
+                    if (!roleExist)
+                    {
+                        await RoleManager.CreateAsync(new IdentityRole(unit.Name));
+
+                    }
+
+                }
+                context.SaveChanges();
+
+            }
+
+
             string[] roleNames = {"Admin", "User"};
             IdentityResult roleResult;
 
@@ -182,7 +201,8 @@ namespace Aut3
                     roleResult = await RoleManager.CreateAsync(new IdentityRole(roleName));
                 }
             }
-
+            
+    
             ApplicationUser adminUser = new ApplicationUser
             {
                 UserName = "skomorowski2@gmail.pl",

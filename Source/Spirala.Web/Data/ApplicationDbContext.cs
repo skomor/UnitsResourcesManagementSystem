@@ -31,6 +31,10 @@ namespace Aut3.Data
             modelBuilder.Entity<MilitaryUnit>()
                 .HasIndex(u => u.Name)
                 .IsUnique();
+            modelBuilder.Entity<MilitaryUnit>()
+                .HasIndex(u => u.UnitNumber)
+                .IsUnique();
+
             
             modelBuilder.Entity<MilitaryUnit>()
                 .HasMany(c => c.Soldiers)

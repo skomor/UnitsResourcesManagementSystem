@@ -17,7 +17,7 @@ import Guid from "devextreme/core/guid";
 
 const putBody = {
 
-    newUnitId: '',
+  
     newRole: ''
 }
 
@@ -28,7 +28,7 @@ export class ListUsers extends Component {
         super(props);
         this.state = {users: [], loading: true, show: false, units:[]};
         this.renderUserTable = this.renderUserTable.bind(this);
-        this.renderUnitOptions = this.renderUnitOptions.bind(this);
+       // this.renderUnitOptions = this.renderUnitOptions.bind(this);
         //this.handleChangeForUnit = this.handleChangeForUnit.bind(this);
 
     }
@@ -37,14 +37,12 @@ export class ListUsers extends Component {
          this.populateData();
     }
 
-    handleClickOpen(id, role, unit) {
-        console.log(this.state.units);
+    handleClickOpen(id, role) {
 
         this.setState({
             show: true,
-            selectedRole: role,
+            selectedRoles: role ,
             selectedUserId: id,
-            selectedUserUnit: unit ? unit.militaryUnitId : ""
         });
 
     }
@@ -52,17 +50,18 @@ export class ListUsers extends Component {
     handleClose = () => {
         this.setState({
             show: false,
-            selectedRole: '',
+            selectedRoles: [],
             selectedUserId: '',
-            selectedUserUnit: ''
+           
         });
     };
 
     async SendToDB(selectedUserId) {
 
         const token = await authService.getAccessToken();
-        putBody.newRole = this.state.selectedRole;
-        putBody.newUnitId =this.state.selectedUserUnit ? new Guid(this.state.selectedUserUnit) : new Guid("00000000-0000-0000-0000-000000000000") ;
+        putBody.newRole = this.state.selectedRoles;
+        var roles = this.state.selectedRoles;
+       // putBody.newUnitId =this.state.selectedUserUnit ? new Guid(this.state.selectedUserUnit) : new Guid("00000000-0000-0000-0000-000000000000") ;
         const response = await fetch('api/user' + "/" + selectedUserId,
             {
                 method: 'PUT',
@@ -76,14 +75,13 @@ export class ListUsers extends Component {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
                     },
-                body: JSON.stringify(putBody)
+                body: JSON.stringify(roles)
             });
-        putBody.newUnitId = putBody.newRole = '';
+        putBody.newRole = '';
         this.setState({
             show: false,
-            selectedRole: '',
+            selectedRoles: [],
             selectedUserId: '',
-            selectedUserUnit: ''
         });
         this.populateData()
 
@@ -91,11 +89,18 @@ export class ListUsers extends Component {
     }
 
     handleChange = (event) => {
-        this.setState({selectedRole: event.target.value});
+    /*        const { options } = event.target;
+            const value = [];
+            for (let i = 0, l = options.length; i < l; i += 1) {
+                if (options[i].selected) {
+                    value.push(options[i].value);
+                }
+            }
+            setPersonName(value);*/
+        
+        this.setState({selectedRoles: event.target.value});
     };
-    handleChangeForUnit = (event) => {
-        this.setState({selectedUserUnit: event.target.value});
-    };
+   
 
     renderUserTable(users) {
         return (
@@ -106,17 +111,15 @@ export class ListUsers extends Component {
                         <th>Name</th>
                         <th>ID</th>
                         <th>Role</th>
-                        <th>Nazwa jednostki</th>
 
                     </tr>
                     </thead>
                     <tbody>
                     {users.map(user =>
-                        <tr key={user.id} onClick={() => this.handleClickOpen(user.id, user.role, user.unit)}>
+                        <tr key={user.id} onClick={() => this.handleClickOpen(user.id, user.role)}>
                             <td>{user.email}</td>
                             <td>{user.id}</td>
-                            <td>{user.role}</td>
-                            <td>{user.unit ? user.unit.name : ""}</td>
+                            <td>{user.role.toString()}</td>
 
                         </tr>
                     )}
@@ -141,26 +144,17 @@ export class ListUsers extends Component {
                     </DialogContentText>
                     <form noValidate>
                         <FormControl>
-                            <InputLabel htmlFor="max-width">Rola:</InputLabel>
+                            <InputLabel htmlFor="max-width">Nowa rola:</InputLabel>
                             <Select
+                                multiple
                                 autoFocus
-                                value={this.state.selectedRole}
+                                value={this.state.selectedRoles}
                                 onChange={this.handleChange}>
                                 <MenuItem value="Admin">Admin</MenuItem>
                                 <MenuItem value="User">User</MenuItem>
-                            </Select>
-                        </FormControl>
-                        <br/>
-                        <FormControl>
-                            <InputLabel htmlFor="max-width">Jednostka:</InputLabel>
-                            <Select
-                                autoFocus
-                                value={this.state.selectedUserUnit}
-                                onChange={this.handleChangeForUnit}>
-                                <MenuItem value={null}>BRAK </MenuItem>
                                 {this.state.units.map(unit =>
-                                   unit.MilitaryUnitId === "00000000-0000-0000-0000-000000000000" ? "" :
-                                    <MenuItem value={unit.MilitaryUnitId}>{unit.Name}</MenuItem>
+                                    unit.MilitaryUnitId === "00000000-0000-0000-0000-000000000000" ? "" :
+                                        <MenuItem value={unit.Name}>{unit.Name}</MenuItem>
                                 )}
                             </Select>
                         </FormControl>
@@ -177,16 +171,7 @@ export class ListUsers extends Component {
             </Dialog>)
     }
 
-    renderUnitOptions() {
-        var units = this.state.units;
-        return (
-            <div>
-                {this.state.units.map(unit =>
-                    <MenuItem value={unit.MilitaryUnitId}>{unit.Name}</MenuItem>
-                )}
-            </div>
-        )
-    }
+   
 
     render() {
         var dialog = this.renderDialog()
@@ -241,10 +226,10 @@ export class ListUsers extends Component {
                 });
 
             var tempRole = await role.json();
-            data[i].role = tempRole[0];
+            data[i].role = tempRole;
         }
 
-        const responseUnit = await fetch('odata/MilitaryUnits',
+       const responseUnit = await fetch('odata/MilitaryUnits',
             {
                 headers: !token
                     ? {

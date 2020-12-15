@@ -57,6 +57,10 @@ namespace Aut3.Areas.Identity.Pages.Account
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "User Name")]
+            public string UserName { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
@@ -71,7 +75,7 @@ namespace Aut3.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
             
             [Required]
-            public Guid UnitId { get; set; }
+            public string UnitName { get; set; }
 
         }
 
@@ -81,7 +85,7 @@ namespace Aut3.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             List<MilitaryUnit> availableUnits = _context.MilitaryUnit.ToList();
             // convert to selectlistitems
-            Units = availableUnits.Select(x => new SelectListItem() { Text = x.Name, Value = x.MilitaryUnitId.ToString() }).ToList();
+            Units = availableUnits.Select(x => new SelectListItem() { Text = x.Name, Value = x.Name.ToString() }).ToList();
 
         }
 
@@ -93,9 +97,9 @@ namespace Aut3.Areas.Identity.Pages.Account
             {
                 var user = new ApplicationUser
                 {
-                    UserName = Input.Email,
+                    UserName = Input.UserName,
                     Email = Input.Email,
-                    Unit = _context.MilitaryUnit.Where(x => x.MilitaryUnitId == Input.UnitId).FirstOrDefault()
+                  //  Unit = _context.MilitaryUnit.Where(x => x.MilitaryUnitId == Input.UnitId).FirstOrDefault()
 
                     
                 };
@@ -105,6 +109,13 @@ namespace Aut3.Areas.Identity.Pages.Account
                     var res2 = await _userManager.AddToRoleAsync(user, "User");
                     if (res2.Succeeded)
                         _logger.LogInformation("User has role assigned as: User");
+                    else
+                    {
+                        _logger.LogInformation("ERROR CHOLERA");
+                    }
+                    var res3 = await _userManager.AddToRoleAsync(user, Input.UnitName);
+                    if (res3.Succeeded)
+                        _logger.LogInformation("User has role assigned as:" + Input.UnitName);
                     else
                     {
                         _logger.LogInformation("ERROR CHOLERA");

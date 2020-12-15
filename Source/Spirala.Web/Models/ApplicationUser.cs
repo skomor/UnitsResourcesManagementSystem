@@ -8,6 +8,6 @@ namespace Aut3.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        public MilitaryUnit Unit { get; set; }
+       // public MilitaryUnit Unit { get; set; }
     }
 }

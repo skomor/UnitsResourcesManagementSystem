@@ -4,20 +4,22 @@ using Aut3.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Aut3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201214222446_login")]
+    partial class login
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.1");
+                .HasAnnotation("ProductVersion", "5.0.0");
 
             modelBuilder.Entity("Aut3.Models.ApplicationUser", b =>
                 {
@@ -67,6 +69,9 @@ namespace Aut3.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
+                    b.Property<Guid?>("UnitMilitaryUnitId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -80,6 +85,8 @@ namespace Aut3.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("UnitMilitaryUnitId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -179,7 +186,7 @@ namespace Aut3.Migrations
 
                     b.Property<string>("UnitNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("MilitaryUnitId");
 
@@ -187,9 +194,6 @@ namespace Aut3.Migrations
                         .IsUnique();
 
                     b.HasIndex("PowiatID");
-
-                    b.HasIndex("UnitNumber")
-                        .IsUnique();
 
                     b.ToTable("MilitaryUnit");
                 });
@@ -623,6 +627,15 @@ namespace Aut3.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("Aut3.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("Aut3.Models.MilitaryUnit", "Unit")
+                        .WithMany()
+                        .HasForeignKey("UnitMilitaryUnitId");
+
+                    b.Navigation("Unit");
                 });
 
             modelBuilder.Entity("Aut3.Models.FamilyRelationToSoldier", b =>

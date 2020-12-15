@@ -37,7 +37,7 @@ namespace Aut3.Controllers
         [HttpGet]
         public IEnumerable<ApplicationUser> Get()
         {
-            this.Users = userManager.Users.Include(x=> x.Unit);
+            this.Users = userManager.Users;
 
             return this.Users;
         }
@@ -66,31 +66,45 @@ namespace Aut3.Controllers
 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, [FromBody] putBody pb)
+        public async Task<IActionResult> Put(string id, [FromBody] string[] roles)
         {
-            var newRole = pb.newRole;
-            var newUnitId = pb.newUnitId;
+            //var newRole = pb.newRole;
             
             var user = await userManager.FindByIdAsync(id);
 
             var rolesInUser = await userManager.GetRolesAsync(user);
+            
             await userManager.RemoveFromRolesAsync(user, rolesInUser.ToArray());
 
 
             if (user != null){
-                if (_context.MilitaryUnit.Where(x => x.MilitaryUnitId == newUnitId).Any()){
+                /*if (_context.MilitaryUnit.Where(x => x.MilitaryUnitId == newUnitId).Any()){
                     user.Unit = await _context.MilitaryUnit.FindAsync(newUnitId);
                 }else{
                     return BadRequest();
 
-                }
+                }*/
              
 
                 // var roles = roleManager.Roles.ToList();
-                IdentityRole newR = new IdentityRole(newRole);
 
-                if (await roleManager.RoleExistsAsync(newR.Name)){
-                    var res2 = await userManager.AddToRoleAsync(user, newRole);
+                bool doRolesExist = true;
+                foreach (var role in roles){
+                   doRolesExist =  doRolesExist && await roleManager.RoleExistsAsync(new IdentityRole(role).Name);
+                }
+
+                if (doRolesExist){
+                    IdentityResult res2 = IdentityResult.Failed();
+                    /*if (rolesInUser.Contains(newRole)){
+                         res2 =  await userManager.AddToRolesAsync(user, rolesInUser);
+
+                    }
+                    else{*/
+                    res2 =await userManager.AddToRolesAsync(user, roles);
+                        
+
+                   // }
+                    
                     if (res2.Succeeded)
                         return NoContent();
                     else{
@@ -111,7 +125,6 @@ namespace Aut3.Controllers
         public class putBody
         {
             public string newRole { get; set; }
-            public Guid  newUnitId { get; set; }
         }
     }
 }
