@@ -24,6 +24,7 @@ namespace Aut3.Controllers
 
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly UserManager<ApplicationUser> userManager;
+     //   private readonly SignInManager<ApplicationDbContext> _signInManager;
         private ApplicationDbContext _context;
 
         public UserController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> role, ApplicationDbContext context)
@@ -31,6 +32,7 @@ namespace Aut3.Controllers
             this.userManager = userManager;
             this.roleManager = role;
             this._context = context;
+        //    this._signInManager = manager;
         }
 
         // GET: api/<UserController>
@@ -100,14 +102,17 @@ namespace Aut3.Controllers
 
                     }
                     else{*/
-                    res2 =await userManager.AddToRolesAsync(user, roles);
-                        
+                    res2 = await userManager.AddToRolesAsync(user, roles);
 
-                   // }
+                    // }
+
+                    if (res2.Succeeded){
                     
-                    if (res2.Succeeded)
-                        return NoContent();
-                    else{
+
+                   // await _signInManager.RefreshSignInAsync(_context);
+                    return NoContent();
+                }
+                else{
                         return BadRequest();
                     }
                 }

@@ -42,6 +42,8 @@ namespace Aut3.Controllers
         {
             return SingleResult.Create(_context.MilitaryUnit.Where(c => c.MilitaryUnitId == id));
         }
+        
+    
 
         // PUT: api/MilitaryUnits/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for

@@ -15,6 +15,10 @@ import FamilyMembers from "./components/FamilyMembers";
 import MilitaryUnits from "./components/MilitaryUnits";
 import Vehicles from "./components/Vehicles";
 import authService from "./components/api-authorization/AuthorizeService";
+import VehiclesForUser from "./components/NormalUserComponents/VehiclesForUser";
+import FamilyMembersForUser from "./components/NormalUserComponents/FamilyMembersForUser";
+import SoldierListForUser from "./components/NormalUserComponents/SoldierListForUser";
+import AllOdataStores from "./components/DataSources/AllOdataStores";
 
 export default class App extends Component {
     static displayName = App.name;
@@ -34,10 +38,14 @@ export default class App extends Component {
 
     async populateState() {
         const [isAuthenticated, user] = await Promise.all([authService.isAuthenticated(), authService.getUser()])
+        if (isAuthenticated) {
+            var UnitIds = await AllOdataStores.getUnitsIdsByNames(user && user.role);
+        }
         this.setState({
             isAuthenticated,
             role: user && user.role,
-            user: user
+            user: user,
+            unitIds: UnitIds
         });
     }
 
@@ -46,12 +54,15 @@ export default class App extends Component {
             <Layout>
                 <Route exact path='/' component={() => <Home passedProp={this.state.role}/>}/>
                 <Route path='/counter' component={Counter}/>
-                <AuthorizeRoute path='/fetch-data' component={() => <FetchData passedRole={this.state.role} passedUser={this.state.user}/>}/>
-                <AuthorizeRoute path='/ListUsers' component={() => <ListUsers passedRole={this.state.role} passedUser={this.state.user}/>}/>
-                <Route path='/SoldierList' component={() => <SoldierList passedRole={this.state.role} passedUser={this.state.user}/>}/>
-                <Route path='/FamilyMembers' component={() => <FamilyMembers passedRole={this.state.role} passedUser={this.state.user}/>}/>
-                <Route path='/MilitaryUnits' component={() => <MilitaryUnits passedRole={this.state.role} passedUser={this.state.user}/>}/>
-                <Route path='/VehicleList' component={() => <Vehicles passedRole={this.state.role} passedUser={this.state.user}/>}/>
+                <AuthorizeRoute path='/fetch-data' component={FetchData}/>
+                <AuthorizeRoute path='/ListUsers' component={ListUsers}/>
+                <Route path='/SoldierList' component={SoldierList}/>
+                <Route path='/FamilyMembers' component={FamilyMembers}/>
+                <Route path='/MilitaryUnits' component={MilitaryUnits}/>
+                <Route path='/VehicleList' component={Vehicles}/>
+                <Route path='/VehiclesForUser' component={() => <VehiclesForUser passedRoles={this.state.role} passedUnitIds={this.state.unitIds}/>}/>
+                <Route path='/SoldierListForUser' component={() => <SoldierListForUser passedRoles={this.state.role} passedUnitIds={this.state.unitIds}/>}/>
+                <Route path='/FamilyMembersForUser' component={() => <FamilyMembersForUser passedRoles={this.state.role} passedUnitIds={this.state.unitIds}/>}/>
                 <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes}/>
             </Layout>
         );

@@ -8,6 +8,8 @@ import DataGrid, {Column, Editing} from 'devextreme-react/data-grid';
 import ODataStore from 'devextreme/data/odata/store';
 import CustomStore from 'devextreme/data/custom_store';
 import DataSource from "devextreme/data/data_source";
+import authService from "../api-authorization/AuthorizeService";
+import Guid from "devextreme/core/guid";
 
 const productsStore = new ODataStore({
     url: 'https://localhost:44349/odata/Soldiers',
@@ -40,62 +42,67 @@ class AllOdataStores {
 
         })
     }
-    
+
     static militaryUnitForLookUp() {
 
         return new CustomStore({
             key: 'MilitaryUnitId',
             loadMode: "raw",
-            load: () => this.sendRequest( `${URL}/MilitaryUnits`),
-    
+            load: () => this.sendRequest(`${URL}/MilitaryUnits`),
+
 
         })
     }
-  static soldierForLookUp() {
+
+    static soldierForLookUp() {
 
         return new CustomStore({
             key: 'SoldierId',
             loadMode: "raw",
-            load: () => this.sendRequest( `${URL}/Soldiers`)
+            load: () => this.sendRequest(`${URL}/Soldiers`)
         })
     }
+
     static citiesForLookUp() {
 
         return new CustomStore({
             key: 'Miasto',
             loadMode: "raw",
-            load: () => this.sendRequest( `${URL}/MilitaryUnits`),
-     
+            load: () => this.sendRequest(`${URL}/MilitaryUnits`),
+
 
         })
-    } 
+    }
+
     static wojewodztwaForLookUp() {
 
         return new CustomStore({
             key: 'Wojewodztwa',
             loadMode: "raw",
-            load: () => this.sendRequest( `${URL}/Wojewodztwa`),
-      
+            load: () => this.sendRequest(`${URL}/Wojewodztwa`),
+
             //  byKey
 
         })
-    }    
+    }
+
     static PowiatForLookUp() {
 
         return new CustomStore({
             key: 'Powiaty',
             loadMode: "raw",
-            load: () => this.sendRequest( `${URL}/Powiaty`),
-      
+            load: () => this.sendRequest(`${URL}/Powiaty`),
+
             //  byKey
 
         })
     }
+
     static militaryUnits() {
 
         return new CustomStore({
             key: 'MilitaryUnitId',
-            load: () => this.sendRequest( `${URL}/MilitaryUnits`),
+            load: () => this.sendRequest(`${URL}/MilitaryUnits`),
             insert: (values) => this.sendRequest(`${URL}/MilitaryUnits`, 'POST', {
                 values: values
             }),
@@ -107,11 +114,12 @@ class AllOdataStores {
 
         })
     }
+
     static Vehicles() {
 
         return new CustomStore({
             key: 'VehicleId',
-            load: () => this.sendRequest( `${URL}/Vehicles`),
+            load: () => this.sendRequest(`${URL}/Vehicles`),
             insert: (values) => this.sendRequest(`${URL}/Vehicles`, 'POST', {
                 values: values
             }),
@@ -123,7 +131,6 @@ class AllOdataStores {
 
         })
     }
-
 
 
     static registrationOfSoldiersStore() {
@@ -139,8 +146,9 @@ class AllOdataStores {
             remove: (key) => this.sendRequest(`${URL}/RegistrationOfSoldiers/${key}`, 'DELETE')
         })
     }
+
     static familyMembers(selectedSoldierId) {
-       
+
 
         return new CustomStore({
             key: 'FamilyMemberId',
@@ -192,6 +200,51 @@ class AllOdataStores {
     }
 
 
+    static soldiersStoreForUser(toExpand, unitIds) {
+        if(unitIds) {
+            var toUrl = `MilitaryUnitId eq ${unitIds[0]}`;
+            for (let i = 1; i < unitIds.length; i++) {
+
+                toUrl += ` or MilitaryUnitId eq ${unitIds[i]}`
+
+            }
+            return new CustomStore({
+                key: 'SoldierId',
+
+                load: () => this.sendRequest(`${URL}/Soldiers?$expand=${toExpand}` + `&$filter=` + toUrl)
+            });
+        }
+        
+    }
+
+    static async getUnitsIdsByNames(roles) {
+        const token = await authService.getAccessToken();
+
+        const response = await fetch('odata/MilitaryUnits',
+            {
+                headers: !token
+                    ? {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                    : {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+            });
+        const data = await response.json();
+        var arrOfUnits = data.value;
+        var output = [];
+        for (let i = 0; i <roles.length; i++) {
+            for (let j = 0; j < arrOfUnits.length; j++) {
+                if(roles[i] === arrOfUnits[j].Name){
+                    output.push(arrOfUnits[j].MilitaryUnitId)
+                }
+            }
+        }
+        return output;
+    }
 }
 
 export default AllOdataStores; 

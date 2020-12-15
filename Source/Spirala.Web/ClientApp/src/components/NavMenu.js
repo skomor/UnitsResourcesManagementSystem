@@ -16,6 +16,9 @@ import {Link} from 'react-router-dom';
 import {LoginMenu} from './api-authorization/LoginMenu';
 import './NavMenu.css';
 import authService from './api-authorization/AuthorizeService';
+import FamilyMembersForUser from "./NormalUserComponents/FamilyMembersForUser";
+import SoldierListForUser from "./NormalUserComponents/SoldierListForUser";
+import VehiclesForUser from "./NormalUserComponents/VehiclesForUser";
 
 
 export class NavMenu extends Component {
@@ -106,7 +109,13 @@ export class NavMenu extends Component {
                                     </DropdownMenu>
                                 </UncontrolledDropdown>
                                 <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/counter">Counter</NavLink>
+                                    <NavLink tag={Link} className="text-dark" to="/FamilyMembersForUser">Rodziny żołnierzy</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink tag={Link} className="text-dark" to="/SoldierListForUser">Żołnierze</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink tag={Link} className="text-dark" to="/VehiclesForUser">Pojazdy</NavLink>
                                 </NavItem>
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/fetch-data">Fetch data</NavLink>
