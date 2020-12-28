@@ -29,6 +29,8 @@ namespace Aut3.Controllers
         // GET: api/RegistrationOfSoldiers
         [HttpGet]
         [ODataRoute("RegistrationOfSoldiers")]
+        [Authorize(Roles = "Admin,User")]
+
         public  IQueryable<RegistrationOfSoldier> GetRegistrationOfSoldier()
         {
             return  _context.RegistrationOfSoldier;
@@ -40,7 +42,8 @@ namespace Aut3.Controllers
         // GET: api/RegistrationOfSoldiers/5
         [HttpGet("{id}")]
         [ODataRoute("RegistrationOfSoldiers/{id}")]
-        
+        [Authorize(Roles = "Admin,User")]
+
         public SingleResult<RegistrationOfSoldier> GetCategory([FromODataUri] Guid id)
         {
             return SingleResult.Create(_context.RegistrationOfSoldier.Where(c => c.RegistrationOfSoldierId == id));

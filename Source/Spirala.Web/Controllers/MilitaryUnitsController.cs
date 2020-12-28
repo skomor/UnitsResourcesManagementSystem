@@ -29,6 +29,7 @@ namespace Aut3.Controllers
         // GET: api/MilitaryUnits
         [HttpGet]
         [ODataRoute("MilitaryUnits")]
+        [Authorize(Roles = "Admin,User")]
 
         public  IQueryable<MilitaryUnit> GetMilitaryUnit()
         {
@@ -38,6 +39,7 @@ namespace Aut3.Controllers
         // GET: api/MilitaryUnits/5
         [HttpGet("{id}")]
         [ODataRoute("MilitaryUnits/{id}")]
+        [Authorize(Roles = "Admin,User")]
 
         public SingleResult<MilitaryUnit> GetCategory([FromODataUri] Guid id)
         {

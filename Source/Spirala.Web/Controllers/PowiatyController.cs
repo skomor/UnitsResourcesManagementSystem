@@ -28,6 +28,7 @@ namespace Aut3.Controllers
         // GET: api/Powiaty
         [HttpGet]
         [ODataRoute("Powiaty")]
+        [Authorize(Roles = "Admin,User")]
 
         public IQueryable<Powiat> GetPowiat()
         {
@@ -37,6 +38,7 @@ namespace Aut3.Controllers
         // GET: api/Powiaty/5
         [HttpGet("{id}")]
         [ODataRoute("Powiaty/{id}")]
+        [Authorize(Roles = "Admin,User")]
 
         public SingleResult<Powiat> GetCategory([FromODataUri] int id)
         {

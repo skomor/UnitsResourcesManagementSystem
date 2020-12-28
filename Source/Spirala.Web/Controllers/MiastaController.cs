@@ -28,6 +28,7 @@ namespace Aut3.Controllers
         // GET: api/Miasta
         [HttpGet]
         [ODataRoute("Miasta")]
+        [Authorize(Roles = "Admin,User")]
 
         public IQueryable<Miasto> GetMiasta()
         {
@@ -35,6 +36,7 @@ namespace Aut3.Controllers
         }
         [HttpPatch]
         [ODataRoute("Miasta")]
+        [Authorize(Roles = "Admin,User")]
 
         public IActionResult  PatchMiasta([FromBody]  CityQuestion question)
         {

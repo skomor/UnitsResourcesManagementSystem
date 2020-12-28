@@ -16,6 +16,7 @@ namespace Aut3.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [EnableQuery]
+  
 
     public class FamilyMembersController : ODataController
     {
@@ -29,6 +30,8 @@ namespace Aut3.Controllers
         // GET: api/FamilyMembers
         [HttpGet]
         [ODataRoute("FamilyMembers")]
+        [Authorize(Roles = "Admin,User")]
+
 
         public  IQueryable<FamilyMember> GetFamilyMember()
         {
@@ -38,6 +41,8 @@ namespace Aut3.Controllers
         // GET: api/FamilyMembers/5
         [HttpGet("{id}")]
         [ODataRoute("FamilyMembers/{id}")]
+        [Authorize(Roles = "Admin,User")]
+
         public SingleResult<FamilyMember> GetCategory([FromODataUri] Guid id)
         {
             return SingleResult.Create(_context.FamilyMember.Where(c => c.FamilyMemberId == id));

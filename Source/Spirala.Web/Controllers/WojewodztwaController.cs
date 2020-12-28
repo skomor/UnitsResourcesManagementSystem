@@ -28,6 +28,7 @@ namespace Aut3.Controllers
         // GET: api/Wojewodztwo
         [HttpGet]
         [ODataRoute("Wojewodztwa")]
+        [Authorize(Roles = "Admin,User")]
 
         public IQueryable<Wojewodztwo> GetWojewodztwa()
         {
@@ -37,6 +38,8 @@ namespace Aut3.Controllers
         // GET: api/Wojewodztwo/5
         [HttpGet("{id}")]
         [ODataRoute("Wojewodztwa/{id}")]
+        [Authorize(Roles = "Admin,User")]
+
         public SingleResult<Wojewodztwo> GetCategory([FromODataUri] int id)
         {
             return SingleResult.Create(_context.Wojewodztwo.Where(c => c.ID == id));
