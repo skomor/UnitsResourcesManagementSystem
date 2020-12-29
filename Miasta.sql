@@ -96,17 +96,16 @@
 --DBCC CHECKIDENT ('Wojewodztwo',RESEED, 0)
 
 
-  use final20;
+  use final22;
 Create Table miasta22 (
-Nazwa nvarchar(max),
-Rodzaj nvarchar(max) ,
-Gmina nvarchar(max) ,
-Powiat nvarchar(max) ,
-Województwo nvarchar(max) ,
+Name nvarchar(max),
+Kind nvarchar(max) ,
+Borough nvarchar(max) ,
+County nvarchar(max) ,
+Voivodeship nvarchar(max) ,
 ID nvarchar(max) 
-
-
 )
+
 		  BULK INSERT miasta22 FROM  'E:\_Semestr 7\do inzynierki\urzedowy_wykaz_nazw_miejscowosci_2019CSV.csv'  
   WITH
 (
@@ -119,41 +118,40 @@ ID nvarchar(max)
 	--SELECT DISTINCT  Powiat,  Województwo FROM miasta23 Order by Województwo , Powiat;
 
 
-		Insert into Wojewodztwo(Nazwa)   SELECT DISTINCT   Województwo FROM miasta22 Order by Województwo ;
+		Insert into Voivodeship(Name)   SELECT DISTINCT   Voivodeship FROM miasta22 Order by Voivodeship ;
 
 
-SELECT   Powiat,Województwo
+SELECT   County,Voivodeship
 into #tempPW --!!!!
-FROM miasta22 GROUP BY Województwo,Powiat
+FROM miasta22 GROUP BY Voivodeship,County
 
 
-INSERT INTO Powiat 
-SELECT #tempPW.Powiat as Nazwa,  Wojewodztwo.ID as WojewodztwoID
+INSERT INTO County 
+SELECT #tempPW.County as Name,  Voivodeship.ID as WojewodztwoID
 FROM #tempPW
-INNER JOIN Wojewodztwo ON #tempPW.Województwo = Wojewodztwo.Nazwa
+INNER JOIN Voivodeship ON #tempPW.Voivodeship = Voivodeship.Name
 
 
 	--	SELECT DISTINCT * FROM miasta23  WHERE Rodzaj NOT LIKE '%czêœæ%' AND Rodzaj NOT LIKE '%przysió³ek%' ORDER BY Nazwa_miejscowoœci
 
 
 
-		SELECT DISTINCT Nazwa,Rodzaj, Gmina, Powiat, Województwo 
+		SELECT DISTINCT Name,Kind, Borough, County, Voivodeship 
 		into #tempM
-		FROM miasta22  WHERE Rodzaj NOT LIKE '%czêœæ%' AND Rodzaj NOT LIKE '%przysió³ek%' ORDER BY Nazwa;
+		FROM miasta22  WHERE Kind NOT LIKE '%czêœæ%' AND Kind NOT LIKE '%przysió³ek%' ORDER BY Name;
 		--SELECT * FROM #tempM;
 
 
 
-INSERT INTO Miasto
-SELECT  DISTINCT [#tempM].Nazwa AS Nazwa, Wojewodztwo.ID AS WojewodztwoID, Powiat.ID AS PowiatID
+INSERT INTO City
+SELECT  DISTINCT [#tempM].Name AS Nazwa, Voivodeship.ID AS VoivodeshipID, County.ID AS CountyID
 
 FROM            [#tempM] INNER JOIN
-                         Wojewodztwo ON [#tempM].Województwo = Wojewodztwo.Nazwa INNER JOIN
-                         Powiat ON [#tempM].Powiat = Powiat.Nazwa
+                         Voivodeship ON [#tempM].Voivodeship = Voivodeship.Name INNER JOIN
+                         County ON [#tempM].County = County.Name
 ORDER BY Nazwa
 
 drop table if exists [#tempM];
 drop table if exists #tempPW;
 
 
-SELECT * FROM Miasto where Nazwa  LIKE '%Miêdz%'

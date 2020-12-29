@@ -86,6 +86,7 @@ namespace Aut3.Areas.Identity.Pages.Account
             List<MilitaryUnit> availableUnits = _context.MilitaryUnit.ToList();
             // convert to selectlistitems
             Units = availableUnits.Select(x => new SelectListItem() { Text = x.Name, Value = x.Name.ToString() }).ToList();
+            Units = Units.Where(u => u.Text != "").ToList();
 
         }
 
@@ -93,6 +94,9 @@ namespace Aut3.Areas.Identity.Pages.Account
         {
             returnUrl = returnUrl ?? Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            List<MilitaryUnit> availableUnits = _context.MilitaryUnit.ToList();
+            Units = availableUnits.Select(x => new SelectListItem() { Text = x.Name, Value = x.Name.ToString() }).ToList();
+            Units = Units.Where(u => u.Text != "").ToList();
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser

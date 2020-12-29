@@ -16,49 +16,49 @@ namespace Aut3.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [EnableQuery]
-    public class PowiatyController : ODataController
+    public class CountiesController : ODataController
     {
         private readonly ApplicationDbContext _context;
 
-        public PowiatyController(ApplicationDbContext context)
+        public CountiesController(ApplicationDbContext context)
         {
             _context = context;
         }
     
-        // GET: api/Powiaty
+        // GET: api/Counties
         [HttpGet]
-        [ODataRoute("Powiaty")]
+        [ODataRoute("Counties")]
         [Authorize(Roles = "Admin,User")]
 
-        public IQueryable<Powiat> GetPowiat()
+        public IQueryable<County> GetCounty()
         {
-            return  _context.Powiat;
+            return  _context.County;
         }
 
-        // GET: api/Powiaty/5
+        // GET: api/Counties/5
         [HttpGet("{id}")]
-        [ODataRoute("Powiaty/{id}")]
+        [ODataRoute("Counties/{id}")]
         [Authorize(Roles = "Admin,User")]
 
-        public SingleResult<Powiat> GetCategory([FromODataUri] int id)
+        public SingleResult<County> GetCategory([FromODataUri] int id)
         {
-            return SingleResult.Create(_context.Powiat.Where(c => c.ID == id));
+            return SingleResult.Create(_context.County.Where(c => c.ID == id));
         }
 
-        // PUT: api/Powiaty/5
+        // PUT: api/Counties/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        [ODataRoute("Powiaty/{id}")]       
+        [ODataRoute("Counties/{id}")]       
         [Authorize(Roles = "Admin")]
 
-        public async Task<IActionResult> PutPowiat(int id, Powiat powiat)
+        public async Task<IActionResult> PutCounty(int id, County county)
         {
-            if (id != powiat.ID)
+            if (id != county.ID)
             {
                 return BadRequest();
             }
 
-            _context.Entry(powiat).State = EntityState.Modified;
+            _context.Entry(county).State = EntityState.Modified;
 
             try
             {
@@ -66,7 +66,7 @@ namespace Aut3.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PowiatExists(id))
+                if (!CountyExists(id))
                 {
                     return NotFound();
                 }
@@ -79,42 +79,42 @@ namespace Aut3.Controllers
             return NoContent();
         }
 
-        // POST: api/Powiaty
+        // POST: api/Counties
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [ODataRoute("Powiaty")]
+        [ODataRoute("Counties")]
         [Authorize(Roles = "Admin")]
 
-        public async Task<ActionResult<Powiat>> PostPowiat(Powiat powiat)
+        public async Task<ActionResult<County>> PostCounty(County county)
         {
-            _context.Powiat.Add(powiat);
+            _context.County.Add(county);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPowiat", new { id = powiat.ID }, powiat);
+            return CreatedAtAction("GetCounty", new { id = county.ID }, county);
         }
 
-        // DELETE: api/Powiaty/5
+        // DELETE: api/Counties/5
         [HttpDelete("{id}")]
-        [ODataRoute("Powiaty/{id}")]
+        [ODataRoute("Counties/{id}")]
         [Authorize(Roles = "Admin")]
 
-        public async Task<IActionResult> DeletePowiat(int id)
+        public async Task<IActionResult> DeleteCounty(int id)
         {
-            var powiat = await _context.Powiat.FindAsync(id);
-            if (powiat == null)
+            var county = await _context.County.FindAsync(id);
+            if (county == null)
             {
                 return NotFound();
             }
 
-            _context.Powiat.Remove(powiat);
+            _context.County.Remove(county);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool PowiatExists(int id)
+        private bool CountyExists(int id)
         {
-            return _context.Powiat.Any(e => e.ID == id);
+            return _context.County.Any(e => e.ID == id);
         }
     }
 }

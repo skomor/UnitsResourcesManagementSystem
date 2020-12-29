@@ -66,7 +66,7 @@ class AllOdataStores {
     static citiesForLookUp() {
 
         return new CustomStore({
-            key: 'Miasto',
+            key: 'City',
             loadMode: "raw",
             load: () => this.sendRequest(`${URL}/MilitaryUnits`),
 
@@ -74,24 +74,24 @@ class AllOdataStores {
         })
     }
 
-    static wojewodztwaForLookUp() {
+    static voivodeshipsForLookUp() {
 
         return new CustomStore({
-            key: 'Wojewodztwa',
+            key: 'Voivodeships',
             loadMode: "raw",
-            load: () => this.sendRequest(`${URL}/Wojewodztwa`),
+            load: () => this.sendRequest(`${URL}/Voivodeships`),
 
             //  byKey
 
         })
     }
 
-    static PowiatForLookUp() {
+    static CountyForLookUp() {
 
         return new CustomStore({
-            key: 'Powiaty',
+            key: 'Counties',
             loadMode: "raw",
-            load: () => this.sendRequest(`${URL}/Powiaty`),
+            load: () => this.sendRequest(`${URL}/Counties`),
 
             //  byKey
 

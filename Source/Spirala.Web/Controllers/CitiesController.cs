@@ -16,49 +16,62 @@ namespace Aut3.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [EnableQuery]
-    public class WojewodztwaController : ODataController
+    public class CitiesController : ODataController
     {
         private readonly ApplicationDbContext _context;
 
-        public WojewodztwaController(ApplicationDbContext context)
+        public CitiesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Wojewodztwo
+        // GET: api/Cities
         [HttpGet]
-        [ODataRoute("Wojewodztwa")]
+        [ODataRoute("Cities")]
         [Authorize(Roles = "Admin,User")]
 
-        public IQueryable<Wojewodztwo> GetWojewodztwa()
+        public IQueryable<City> GetCities()
         {
-            return  _context.Wojewodztwo;
+            return  _context.City;
+        }
+        [HttpPatch]
+        [ODataRoute("Cities")]
+        [Authorize(Roles = "Admin,User")]
+
+        public IActionResult  PatchCities([FromBody]  CityQuestion question)
+        {
+            
+            var op = _context.City.Any(a => a.Name == question.Name);
+            if (op){
+                return Ok();
+            }
+
+            return NotFound();
         }
 
-        // GET: api/Wojewodztwo/5
+
+        // GET: api/Cities/5
         [HttpGet("{id}")]
-        [ODataRoute("Wojewodztwa/{id}")]
-        [Authorize(Roles = "Admin,User")]
-
-        public SingleResult<Wojewodztwo> GetCategory([FromODataUri] int id)
+        [ODataRoute("Cities/{id}")]
+        public SingleResult<City> GetCategory([FromODataUri] int id)
         {
-            return SingleResult.Create(_context.Wojewodztwo.Where(c => c.ID == id));
+            return SingleResult.Create(_context.City.Where(c => c.ID == id));
         }
 
-        // PUT: api/Wojewodztwo/5
+        // PUT: api/Cities/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        [ODataRoute("Wojewodztwa/{id}")]       
+        [ODataRoute("Cities/{id}")]       
         [Authorize(Roles = "Admin")]
 
-        public async Task<IActionResult> PutWojewodztwo(int id, Wojewodztwo wojewodztwo)
+        public async Task<IActionResult> PutCity(int id, City city)
         {
-            if (id != wojewodztwo.ID)
+            if (id != city.ID)
             {
                 return BadRequest();
             }
 
-            _context.Entry(wojewodztwo).State = EntityState.Modified;
+            _context.Entry(city).State = EntityState.Modified;
 
             try
             {
@@ -66,7 +79,7 @@ namespace Aut3.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!WojewodztwoExists(id))
+                if (!CityExists(id))
                 {
                     return NotFound();
                 }
@@ -79,44 +92,45 @@ namespace Aut3.Controllers
             return NoContent();
         }
 
-        // POST: api/Wojewodztwo
+        // POST: api/Cities
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [ODataRoute("Wojewodztwa")]
+        [ODataRoute("Cities")]
         [Authorize(Roles = "Admin")]
 
-        public async Task<ActionResult<Wojewodztwo>> PostWojewodztwo(Wojewodztwo wojewodztwo)
+        public async Task<ActionResult<City>> PostCity(City city)
         {
-            _context.Wojewodztwo.Add(wojewodztwo);
+            _context.City.Add(city);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetWojewodztwa", new { id = wojewodztwo.ID }, wojewodztwo);
+            return CreatedAtAction("GetCities", new { id = city.ID }, city);
         }
 
-        // DELETE: api/Wojewodztwo/5
+        // DELETE: api/Cities/5
         [HttpDelete("{id}")]
-        [ODataRoute("Wojewodztwa/{id}")]
+        [ODataRoute("Cities/{id}")]
         [Authorize(Roles = "Admin")]
-
-
-
-        public async Task<IActionResult> DeleteWojewodztwo(int id)
+        public async Task<IActionResult> DeleteCity(int id)
         {
-            var wojewodztwo = await _context.Wojewodztwo.FindAsync(id);
-            if (wojewodztwo == null)
+            var city = await _context.City.FindAsync(id);
+            if (city == null)
             {
                 return NotFound();
             }
 
-            _context.Wojewodztwo.Remove(wojewodztwo);
+            _context.City.Remove(city);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool WojewodztwoExists(int id)
+        private bool CityExists(int id)
         {
-            return _context.Wojewodztwo.Any(e => e.ID == id);
+            return _context.City.Any(e => e.ID == id);
         }
     }
+}
+public class CityQuestion
+{
+    public string Name  { get; set; }
 }

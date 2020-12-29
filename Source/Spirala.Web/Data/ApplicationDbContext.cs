@@ -46,11 +46,11 @@ namespace Aut3.Data
 
             
             
-            modelBuilder.Entity<Miasto>()
-                .HasOne(c => c.Powiat).WithMany(e => e.Miasta).OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<City>()
+                .HasOne(c => c.County).WithMany(e => e.Cities).OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<Powiat>()
-                .HasOne(c => c.Wojewodztwo).WithMany(e => e.Powiaty).OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<County>()
+                .HasOne(c => c.Voivodeship).WithMany(e => e.Counties).OnDelete(DeleteBehavior.NoAction);
        
 
 
@@ -70,9 +70,9 @@ namespace Aut3.Data
         public DbSet<Aut3.Models.RegistrationOfSoldier> RegistrationOfSoldier { get; set; }
 
         public DbSet<Aut3.Models.Vehicle> Vehicle { get; set; }
-        public DbSet<Aut3.Models.Wojewodztwo> Wojewodztwo { get; set; }
-        public DbSet<Aut3.Models.Powiat> Powiat { get; set; }
-        public DbSet<Aut3.Models.Miasto> Miasto { get; set; }
+        public DbSet<Aut3.Models.Voivodeship> Voivodeship { get; set; }
+        public DbSet<Aut3.Models.County> County { get; set; }
+        public DbSet<Aut3.Models.City> City { get; set; }
         
         public DbSet<Aut3.Models.RequestsResponsesLog> RequestsResponsesLog { get; set; }
     }

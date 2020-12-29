@@ -35,7 +35,7 @@
              <div class="form-group">
                         <label asp-for="Input.UnitName"></label>
                         <select asp-for="Input.UnitName" asp-items="@(new SelectList(Model.Units, "Value", "Text"))" class="form-control">
-                            <option value="">Pick One</option>
+                            @*<option value="">Pick One</option>*@
                         </select>
                         <span asp-validation-for="Input.UnitName" class="text-danger"></span>
                     </div>

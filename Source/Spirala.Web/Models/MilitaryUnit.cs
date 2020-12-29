@@ -18,10 +18,10 @@ namespace Aut3.Models
         public string UnitNumber{ get; set; }
       
 
-        public string Miasto { get; set; }
+        public string City { get; set; }
         [AutoExpand]
-        public Powiat Powiat { get; set; }
-        public int PowiatID { get; set; }
+        public County County { get; set; }
+        public int CountyID { get; set; }
         
         public List<Soldier> Soldiers { get; set; }
         public List<Vehicle> Vehicles { get; set; }

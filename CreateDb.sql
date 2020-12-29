@@ -1,15 +1,14 @@
---nal;e¿y wczeœniej u¿yæ kwerend z Miasta.sql!
-  use final20;
+  use final22;
   drop table if exists #testo;
-    INSERT INTO MilitaryUnit(PowiatID,MilitaryUnitId,Name,UnitNumber,Miasto) VALUES(2,'F57CA450-8565-4F37-8BF7-1A46E53C4263', 'wat2','1112','Chrz¹szczyrzewoszyce')
+    INSERT INTO MilitaryUnit(CountyID,MilitaryUnitId,Name,UnitNumber,City) VALUES(2,'F57CA450-8565-4F37-8BF7-1A46E53C4263', 'wat2','1112','Chrz¹szczyrzewoszyce')
 
 	;
 	
-    INSERT INTO MilitaryUnit(PowiatID,MilitaryUnitId,Name,UnitNumber,Miasto) VALUES(2,'00000000-0000-0000-0000-000000000000', '','','')
+    INSERT INTO MilitaryUnit(CountyID,MilitaryUnitId,Name,UnitNumber,City) VALUES(2,'00000000-0000-0000-0000-000000000000', '','','')
 
 	;
 
-	  INSERT INTO MilitaryUnit(PowiatID,MilitaryUnitId,Name,UnitNumber,Miasto) VALUES(4,'F57CA450-8565-4F37-8BF7-1A46E53C4264', 'wat3','1112','Warszawa')
+	  INSERT INTO MilitaryUnit(CountyID,MilitaryUnitId,Name,UnitNumber,City) VALUES(4,'F57CA450-8565-4F37-8BF7-1A46E53C4264', 'wat3','1112','Warszawa')
 
 	;
 	/*delete from MilitaryUnit where MilitaryUnitId = 'F57CA450-8565-4F37-8BF7-1A46E53C4263';*/

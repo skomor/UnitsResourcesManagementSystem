@@ -21,7 +21,7 @@ export default class MilitaryUnits extends React.Component {
 
         this.state = {
             militaryUnits: AllOdataStores.militaryUnits(),
-            woje: AllOdataStores.wojewodztwaForLookUp()
+            woje: AllOdataStores.voivodeshipsForLookUp()
         }
         this.onRowUpdating = this.onRowUpdating.bind(this);
       //  this.sendRequest = this.sendRequest.bind(this);
@@ -83,14 +83,14 @@ export default class MilitaryUnits extends React.Component {
                             <Item dataField="Name"/>
                             <Item dataField="UnitNumber"/>
 
-                            <Item dataField="Miasto">
+                            <Item dataField="City">
                                 <RequiredRule message="Miasto Jest Wymagane"/>
                               
                               <AsyncRule
                                     message="Niepoprawne Miasto"
                                     validationCallback={this.asyncValidation}/>
                             </Item>
-                            <Item dataField="PowiatID">
+                            <Item dataField="CountyID">
                                 <RequiredRule message="Powiat Jest Wymagany"/>
                             </Item>
 
@@ -111,12 +111,12 @@ export default class MilitaryUnits extends React.Component {
 
                 <Column dataField="Name" caption="Name"/>
                 <Column dataField="UnitNumber" caption="UnitNumber"/>
-                <Column dataField="Miasto" width={180}/>
-                <Column dataField="PowiatID" width={180}>
-                    <Lookup dataSource={AllOdataStores.PowiatForLookUp()} valueExpr="ID" displayExpr="Nazwa"/>
+                <Column dataField="City" width={180}/>
+                <Column dataField="CountyID" width={180}>
+                    <Lookup dataSource={AllOdataStores.CountyForLookUp()} valueExpr="ID" displayExpr="Name"/>
                 </Column>
-                <Column dataField="Powiat.Wojewodztwo.ID" width={180}>
-                    <Lookup dataSource={AllOdataStores.wojewodztwaForLookUp()} valueExpr="ID" displayExpr="Nazwa"/>
+                <Column dataField="County.Voivodeship.ID" width={180}>
+                    <Lookup dataSource={AllOdataStores.voivodeshipsForLookUp()} valueExpr="ID" displayExpr="Name"/>
                 </Column>
 
 
@@ -130,7 +130,7 @@ export default class MilitaryUnits extends React.Component {
     }*/
     async getDataAxios(value){
         
-        const response = await fetch('https://localhost:44349/odata/Miasta', {
+        const response = await fetch('https://localhost:44349/odata/Cities', {
             method: 'Patch',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ Name: value}),

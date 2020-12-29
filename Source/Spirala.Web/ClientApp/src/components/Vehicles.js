@@ -95,6 +95,9 @@ class Vehicles extends React.Component {
                                 <Item dataField="TransmissionConfig"/>
                                 <Item dataField="FuelConfig"/>
                                 <Item dataField="DateOfProduction"/>
+                                <Item dataField="SoldierId"/>
+                                <Item dataField="PowerOutputHP"/>
+                                <Item dataField="WeightKg"/>
 
 
                             </Item>
@@ -113,7 +116,8 @@ class Vehicles extends React.Component {
                     <Column dataField="FuelConfig" caption="Paliwo">
                         <Lookup dataSource={FuelTypeEnum} valueExpr="id" displayExpr="name"/>
                     </Column>
-                    <Column dataField="DateOfProduction" caption="Data Produkcji"/>
+                    <Column dataField="DateOfProduction" caption="Data Produkcji" dataType= 'date'
+                            format = 'dd/MM/yyyy' selectedFilterOperation={'between'} />
                     <Column dataField="WeightKg" caption="Waga[kg]"/>
                     <Column dataField="PowerOutputHP" caption="Moc[km]"/>
                     <Column dataField="CurrUnitID" caption="Aktualna Jednosta">

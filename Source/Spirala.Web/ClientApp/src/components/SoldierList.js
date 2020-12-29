@@ -179,7 +179,8 @@ class SoldierList extends React.Component {
                 </Column>
                 <Column dataField="RegistrationOfSoldier.Notes" caption={"Notatki z rej"}>
                 </Column>
-                <Column dataField="RegistrationOfSoldier.DateOfRegistration" caption={"Data rej"}>
+                <Column dataField="RegistrationOfSoldier.DateOfRegistration" caption={"Data rej"} dataType= 'date'
+                        format = 'dd/MM/yyyy' selectedFilterOperation={'between'} >
                 </Column>
 
                 <Column dataField="RegistrationOfSoldier.MilitaryUnitId" caption={"Jednostka rej"}>

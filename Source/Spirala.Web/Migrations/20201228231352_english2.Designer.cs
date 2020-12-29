@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Aut3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201210212925_enumsFix")]
-    partial class enumsFix
+    [Migration("20201228231352_english2")]
+    partial class english2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -19,7 +19,7 @@ namespace Aut3.Migrations
             modelBuilder
                 .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.0");
+                .HasAnnotation("ProductVersion", "5.0.1");
 
             modelBuilder.Entity("Aut3.Models.ApplicationUser", b =>
                 {
@@ -86,6 +86,51 @@ namespace Aut3.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("Aut3.Models.City", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("CountyID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("VoivodeshipID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CountyID");
+
+                    b.HasIndex("VoivodeshipID");
+
+                    b.ToTable("City");
+                });
+
+            modelBuilder.Entity("Aut3.Models.County", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("VoivodeshipID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("VoivodeshipID");
+
+                    b.ToTable("County");
+                });
+
             modelBuilder.Entity("Aut3.Models.FamilyMember", b =>
                 {
                     b.Property<Guid>("FamilyMemberId")
@@ -138,79 +183,37 @@ namespace Aut3.Migrations
                     b.ToTable("FamilyRelationToSoldier");
                 });
 
-            modelBuilder.Entity("Aut3.Models.Miasto", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("Nazwa")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PowiatID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WojewodztwoID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("PowiatID");
-
-                    b.HasIndex("WojewodztwoID");
-
-                    b.ToTable("Miasto");
-                });
-
             modelBuilder.Entity("Aut3.Models.MilitaryUnit", b =>
                 {
                     b.Property<Guid>("MilitaryUnitId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Miasto")
+                    b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CountyID")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("PowiatID")
-                        .HasColumnType("int");
-
                     b.Property<string>("UnitNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("MilitaryUnitId");
+
+                    b.HasIndex("CountyID");
 
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.HasIndex("PowiatID");
+                    b.HasIndex("UnitNumber")
+                        .IsUnique();
 
                     b.ToTable("MilitaryUnit");
-                });
-
-            modelBuilder.Entity("Aut3.Models.Powiat", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("Nazwa")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("WojewodztwoID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("WojewodztwoID");
-
-                    b.ToTable("Powiat");
                 });
 
             modelBuilder.Entity("Aut3.Models.RegistrationOfSoldier", b =>
@@ -371,19 +374,19 @@ namespace Aut3.Migrations
                     b.ToTable("Vehicle");
                 });
 
-            modelBuilder.Entity("Aut3.Models.Wojewodztwo", b =>
+            modelBuilder.Entity("Aut3.Models.Voivodeship", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<string>("Nazwa")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
-                    b.ToTable("Wojewodztwo");
+                    b.ToTable("Voivodeship");
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.DeviceFlowCodes", b =>
@@ -624,6 +627,36 @@ namespace Aut3.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Aut3.Models.City", b =>
+                {
+                    b.HasOne("Aut3.Models.County", "County")
+                        .WithMany("Cities")
+                        .HasForeignKey("CountyID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Aut3.Models.Voivodeship", "Voivodeship")
+                        .WithMany()
+                        .HasForeignKey("VoivodeshipID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("County");
+
+                    b.Navigation("Voivodeship");
+                });
+
+            modelBuilder.Entity("Aut3.Models.County", b =>
+                {
+                    b.HasOne("Aut3.Models.Voivodeship", "Voivodeship")
+                        .WithMany("Counties")
+                        .HasForeignKey("VoivodeshipID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Voivodeship");
+                });
+
             modelBuilder.Entity("Aut3.Models.FamilyRelationToSoldier", b =>
                 {
                     b.HasOne("Aut3.Models.FamilyMember", "FamilyMember")
@@ -643,45 +676,15 @@ namespace Aut3.Migrations
                     b.Navigation("Soldier");
                 });
 
-            modelBuilder.Entity("Aut3.Models.Miasto", b =>
-                {
-                    b.HasOne("Aut3.Models.Powiat", "Powiat")
-                        .WithMany("Miasta")
-                        .HasForeignKey("PowiatID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Aut3.Models.Wojewodztwo", "Wojewodztwo")
-                        .WithMany()
-                        .HasForeignKey("WojewodztwoID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Powiat");
-
-                    b.Navigation("Wojewodztwo");
-                });
-
             modelBuilder.Entity("Aut3.Models.MilitaryUnit", b =>
                 {
-                    b.HasOne("Aut3.Models.Powiat", "Powiat")
+                    b.HasOne("Aut3.Models.County", "County")
                         .WithMany()
-                        .HasForeignKey("PowiatID")
+                        .HasForeignKey("CountyID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Powiat");
-                });
-
-            modelBuilder.Entity("Aut3.Models.Powiat", b =>
-                {
-                    b.HasOne("Aut3.Models.Wojewodztwo", "Wojewodztwo")
-                        .WithMany("Powiaty")
-                        .HasForeignKey("WojewodztwoID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Wojewodztwo");
+                    b.Navigation("County");
                 });
 
             modelBuilder.Entity("Aut3.Models.RegistrationOfSoldier", b =>
@@ -783,6 +786,11 @@ namespace Aut3.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Aut3.Models.County", b =>
+                {
+                    b.Navigation("Cities");
+                });
+
             modelBuilder.Entity("Aut3.Models.FamilyMember", b =>
                 {
                     b.Navigation("FamilyRelationToSoldiers");
@@ -797,11 +805,6 @@ namespace Aut3.Migrations
                     b.Navigation("Vehicles");
                 });
 
-            modelBuilder.Entity("Aut3.Models.Powiat", b =>
-                {
-                    b.Navigation("Miasta");
-                });
-
             modelBuilder.Entity("Aut3.Models.Soldier", b =>
                 {
                     b.Navigation("FamilyRelationToSoldiers");
@@ -811,9 +814,9 @@ namespace Aut3.Migrations
                     b.Navigation("RegistrationOfSoldier");
                 });
 
-            modelBuilder.Entity("Aut3.Models.Wojewodztwo", b =>
+            modelBuilder.Entity("Aut3.Models.Voivodeship", b =>
                 {
-                    b.Navigation("Powiaty");
+                    b.Navigation("Counties");
                 });
 #pragma warning restore 612, 618
         }
