@@ -1,4 +1,4 @@
-  use final22;
+  use final23;
   drop table if exists #testo;
     INSERT INTO MilitaryUnit(CountyID,MilitaryUnitId,Name,UnitNumber,City) VALUES(2,'F57CA450-8565-4F37-8BF7-1A46E53C4263', 'wat2','1112','Chrz¹szczyrzewoszyce')
 
@@ -8,7 +8,7 @@
 
 	;
 
-	  INSERT INTO MilitaryUnit(CountyID,MilitaryUnitId,Name,UnitNumber,City) VALUES(4,'F57CA450-8565-4F37-8BF7-1A46E53C4264', 'wat3','1112','Warszawa')
+	  INSERT INTO MilitaryUnit(CountyID,MilitaryUnitId,Name,UnitNumber,City) VALUES(4,'F57CA450-8565-4F37-8BF7-1A46E53C4264', 'wat3','11123','Warszawa')
 
 	;
 	/*delete from MilitaryUnit where MilitaryUnitId = 'F57CA450-8565-4F37-8BF7-1A46E53C4263';*/

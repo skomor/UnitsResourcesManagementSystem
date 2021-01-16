@@ -59,22 +59,23 @@ namespace Aut3.Areas.Identity.Pages.Account
             public string Email { get; set; }
             [Required]
             [DataType(DataType.Text)]
-            [Display(Name = "User Name")]
+            [Display(Name = "Nazwa użytkownika")]
             public string UserName { get; set; }
 
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
+            [StringLength(100, ErrorMessage = "{0}Hasło musi mieć co najmniej {2}, ale nie więcej niź {1} znaków.",
                 MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "Hasło")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Potwierdż hasło")]
+            [Compare("Password", ErrorMessage = "Hasła nie są takie same")]
             public string ConfirmPassword { get; set; }
             
             [Required]
+            [Display(Name = "Jednostka")]
             public string UnitName { get; set; }
 
         }

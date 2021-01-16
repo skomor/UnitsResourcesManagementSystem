@@ -102,7 +102,7 @@ export class AuthorizeService {
                 throw new Error('Popup disabled. Change \'AuthorizeService.js:AuthorizeService._popupDisabled\' to false to enable it.')
             }
 
-            await this.userManager.signoutPopup(this.createArguments());
+            await this.userManager.signoutPopup(this.creaasteArguments());
             this.updateState(undefined);
             return this.success(state);
         } catch (popupSignOutError) {

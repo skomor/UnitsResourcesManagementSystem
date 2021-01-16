@@ -21,7 +21,7 @@ export default class MilitaryUnits extends React.Component {
 
         this.state = {
             militaryUnits: AllOdataStores.militaryUnits(),
-            woje: AllOdataStores.voivodeshipsForLookUp()
+           // woje: AllOdataStores.voivodeshipsForLookUp()
         }
         this.onRowUpdating = this.onRowUpdating.bind(this);
       //  this.sendRequest = this.sendRequest.bind(this);
@@ -49,7 +49,7 @@ export default class MilitaryUnits extends React.Component {
     }
 
     render() {
-        const {militaryUnits, woje} = this.state;
+        const {militaryUnits} = this.state;
         var pID;
         return (
             <DataGrid

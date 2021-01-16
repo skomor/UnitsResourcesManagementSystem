@@ -53,7 +53,6 @@ namespace Aut3.Controllers
         [HttpPut("{id}")]
         [ODataRoute("Vehicles/{id}")]
         [Authorize(Roles = "Admin")]
-
         public async Task<IActionResult> PutVehicle(Guid id, Vehicle vehicle)
         {
             if (id != vehicle.VehicleId)
