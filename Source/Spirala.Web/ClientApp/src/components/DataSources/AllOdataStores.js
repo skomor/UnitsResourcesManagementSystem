@@ -11,15 +11,7 @@ import DataSource from "devextreme/data/data_source";
 import authService from "../api-authorization/AuthorizeService";
 import Guid from "devextreme/core/guid";
 
-const productsStore = new ODataStore({
-    url: 'https://localhost:44349/odata/Soldiers',
-    key: 'SoldierId',
-    version: 4,
 
-    onLoaded: () => {
-        // Event handling commands go here
-    }
-});
 const URL = 'https://localhost:44349/odata';
 
 

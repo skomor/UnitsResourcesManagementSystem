@@ -69,15 +69,7 @@ export class NavMenu extends Component {
                         <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed}
                                   navbar>
                             <ul className="navbar-nav flex-grow">
-                             {/*   {
-                                    role && role.includes("Admin") ?
-                                        <span>
-                                            <NavItem>
-                                                <NavLink tag={Link} className="text-dark"
-                                                         to="/ListUsers">List User</NavLink>
-                                            </NavItem>
-                                        </span>
-                                        : null}*/}
+                   
                               
                                 {
                                     role && role.includes("Admin") ?
@@ -117,12 +109,7 @@ export class NavMenu extends Component {
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/VehiclesForUser">Pojazdy</NavLink>
                                 </NavItem>
-                               {/* <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/fetch-data">Fetch data</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/SoldierList">List Soldier</NavLink>
-                                </NavItem>*/}
+                 
                                 <LoginMenu>
                                 </LoginMenu>
                             </ul>

@@ -108,23 +108,6 @@ namespace Aut3
             app.UseAuthorization();
 
 
-            /*
-            app.UseMvc(routeBuilder =>
-            {
-                /*
-                routeBuilder.Select().Filter();
-                routeBuilder.MapODataServiceRoute("odata", "odata", GetEdmModel());
-                routeBuilder.Filter().OrderBy().Expand().Select().MaxTop(100);
-                #1#
-
-               // routeBuilder.EnableDependencyInjection();
-
-
-            });
-            */
-
-
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

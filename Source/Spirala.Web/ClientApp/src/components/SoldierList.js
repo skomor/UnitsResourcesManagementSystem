@@ -13,26 +13,10 @@ import {ranksE} from "./DataSources/RanksEnum";
 
 import DataSource from "devextreme/data/data_source";
 
-/*const productsStore = new ODataStore({
-    url: 'https://localhost:44349/odata/Soldiers',
-    key: 'SoldierId',
-    version: 4,
-
-    onLoaded: () => {
-        // Event handling commands go here
-    }
-});*/
 
 
-/*const dataSourceOptions = {
-    store: {
-        type: 'odata',
-        url: 'https://localhost:44349/odata/Soldiers',
-        version: 4,
-    },
-    expand: 'RegistrationOfSoldier',
 
-};*/
+
 class SoldierList extends React.Component {
     constructor(props) {
         super(props);
@@ -40,50 +24,16 @@ class SoldierList extends React.Component {
             rankLookup: ranksE,
             militaryUnit: AllOdataStores.militaryUnitForLookUp(),
             soldiersSource: AllOdataStores.soldiersStore("RegistrationOfSoldier,CurrUnit"),
-            /*       customersData: new CustomStore({
-                       key: 'Value',
-                       loadMode: 'raw',
-                       load: () => this.sendRequest(`https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi/CustomersLookup`)
-                   }),*/
+  
             registrationsOfSoldierData: AllOdataStores.registrationOfSoldiersStore()
         }
         this.onRowUpdating = this.onRowUpdating.bind(this);
 
-        /*      this.state = {
-                  soldiersData: new CustomStore({
-                 
-                      // version: 4,
-                     // loadMode: 'raw',
-      
-                      key: 'SoldierId',
-                      load: () => this.sendRequest(`${URL}/Soldiers`),
-                      insert: (values) => this.sendRequest(`${URL}/Soldiers`, 'POST', {
-                          values: values
-                      }),
-                      update: (key, values) => this.sendRequest(`${URL}/Soldiers/${key}`, 'PUT', {
-                          values: values
-                      }),
-                      remove: (key) => this.sendRequest(`${URL}/Soldiers/${key}`, 'DELETE')
-                  })
-                 /!* ,
-                  customersData: new CustomStore({
-                      key: 'Value',
-                      loadMode: 'raw',
-                      load: () => this.sendRequest(`${URL}/CustomersLookup`)
-                  }),
-                  shippersData: new CustomStore({
-                      key: 'Value',
-                      loadMode: 'raw',
-                      load: () => this.sendRequest(`${URL}/ShippersLookup`)
-                  })*!/
-              };*/
     }
 
     sendRequest(url, method, data) {
         method = method || 'GET';
         data = data || {};
-
-        // this.logRequest(method, url, data);
 
         if (method === 'GET') {
             return fetch(url, {
@@ -117,19 +67,9 @@ class SoldierList extends React.Component {
     }
 
     onRowUpdating(options) {
-        /*        var oldReg = options.oldData.RegistrationOfSoldier;
-                var newReg = options.newData.RegistrationOfSoldier;
-                var testAs = Object.assign(oldReg, newReg)
-                if (newReg) {
-                    
-                    options.newData = testAs;
-                    
-                }
-                options.newData = Object.assign(options.oldData, options.newData);*/
+
 
         options.newData = $.extend(true, {}, options.oldData, options.newData);
-        //   options.newData = $.extend({}, options.oldData, options.newData);
-        // options.newData = Object.extend({}, options.oldData, options.newData);
 
     }
 
@@ -146,7 +86,6 @@ class SoldierList extends React.Component {
                 mode="cell"
                 showBorders={true}
             >
-                {/* <HeaderFilter visible={this.state.showHeaderFilter} />*/}
 
                 <SearchPanel visible={true}
                              width={240}

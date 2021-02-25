@@ -14,26 +14,7 @@ import {ranksE} from "../DataSources/RanksEnum";
 import DataSource from "devextreme/data/data_source";
 import {Format} from "devextreme-react/filter-builder";
 
-/*const productsStore = new ODataStore({
-    url: 'https://localhost:44349/odata/Soldiers',
-    key: 'SoldierId',
-    version: 4,
 
-    onLoaded: () => {
-        // Event handling commands go here
-    }
-});*/
-
-
-/*const dataSourceOptions = {
-    store: {
-        type: 'odata',
-        url: 'https://localhost:44349/odata/Soldiers',
-        version: 4,
-    },
-    expand: 'RegistrationOfSoldier',
-
-};*/
 class SoldierListForUser extends React.Component {
     constructor(props) {
         super(props);
@@ -57,8 +38,6 @@ class SoldierListForUser extends React.Component {
     sendRequest(url, method, data) {
         method = method || 'GET';
         data = data || {};
-
-        // this.logRequest(method, url, data);
 
         if (method === 'GET') {
             return fetch(url, {
@@ -92,19 +71,9 @@ class SoldierListForUser extends React.Component {
     }
 
     onRowUpdating(options) {
-        /*        var oldReg = options.oldData.RegistrationOfSoldier;
-                var newReg = options.newData.RegistrationOfSoldier;
-                var testAs = Object.assign(oldReg, newReg)
-                if (newReg) {
-                    
-                    options.newData = testAs;
-                    
-                }
-                options.newData = Object.assign(options.oldData, options.newData);*/
+
 
         options.newData = $.extend(true, {}, options.oldData, options.newData);
-        //   options.newData = $.extend({}, options.oldData, options.newData);
-        // options.newData = Object.extend({}, options.oldData, options.newData);
 
     }
 
@@ -121,7 +90,6 @@ class SoldierListForUser extends React.Component {
                 showBorders={true}
             >
                 <FilterRow visible={true} />
-                {/* <HeaderFilter visible={this.state.showHeaderFilter} />*/}
 
                 <SearchPanel visible={true}
                              width={240}

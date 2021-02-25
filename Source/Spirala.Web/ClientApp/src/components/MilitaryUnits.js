@@ -21,10 +21,8 @@ export default class MilitaryUnits extends React.Component {
 
         this.state = {
             militaryUnits: AllOdataStores.militaryUnits(),
-           // woje: AllOdataStores.voivodeshipsForLookUp()
         }
         this.onRowUpdating = this.onRowUpdating.bind(this);
-      //  this.sendRequest = this.sendRequest.bind(this);
         this.asyncValidation = this.asyncValidation.bind(this);
         this.getDataAxios = this.getDataAxios.bind(this);
 
@@ -32,19 +30,8 @@ export default class MilitaryUnits extends React.Component {
 
 
     onRowUpdating(options) {
-        /*        var oldReg = options.oldData.RegistrationOfSoldier;
-                var newReg = options.newData.RegistrationOfSoldier;
-                var testAs = Object.assign(oldReg, newReg)
-                if (newReg) {
-                    
-                    options.newData = testAs;
-                    
-                }
-                options.newData = Object.assign(options.oldData, options.newData);*/
 
         options.newData = $.extend({}, options.oldData, options.newData);
-        //   options.newData = $.extend({}, options.oldData, options.newData);
-        // options.newData = Object.extend({}, options.oldData, options.newData);
 
     }
 
@@ -61,7 +48,6 @@ export default class MilitaryUnits extends React.Component {
                 showBorders={true}
 
             >
-                {/* <HeaderFilter visible={this.state.showHeaderFilter} />*/}
 
                 <SearchPanel visible={true}
                              width={240}
@@ -94,16 +80,6 @@ export default class MilitaryUnits extends React.Component {
                                 <RequiredRule message="Powiat Jest Wymagany"/>
                             </Item>
 
-                            {/*    <Item
-                                dataField="Notes"
-                                editorType="dxTextArea"
-                                colSpan={2}
-                                editorOptions={{ height: 100 }} />
-                        </Item>*/}
-
-                            {/*  <Item itemType="group" caption="Home Address" colCount={2} colSpan={2}>
-                            <Item dataField="StateID" />
-                            <Item dataField="Address" />*/}
                         </Item>
                     </Form>
                 </Editing>
@@ -124,10 +100,7 @@ export default class MilitaryUnits extends React.Component {
         );
     }
 
- /*    sendRequest(value) {
-       
-        return new Promise(this.getDataAxios(value));
-    }*/
+
     async getDataAxios(value){
         
         const response = await fetch('https://localhost:44349/odata/Cities', {

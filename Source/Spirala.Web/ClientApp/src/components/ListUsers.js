@@ -28,8 +28,7 @@ export class ListUsers extends Component {
         super(props);
         this.state = {users: [], loading: true, show: false, units:[]};
         this.renderUserTable = this.renderUserTable.bind(this);
-       // this.renderUnitOptions = this.renderUnitOptions.bind(this);
-        //this.handleChangeForUnit = this.handleChangeForUnit.bind(this);
+
 
     }
 
@@ -61,7 +60,6 @@ export class ListUsers extends Component {
         const token = await authService.getAccessToken();
         putBody.newRole = this.state.selectedRoles;
         var roles = this.state.selectedRoles;
-       // putBody.newUnitId =this.state.selectedUserUnit ? new Guid(this.state.selectedUserUnit) : new Guid("00000000-0000-0000-0000-000000000000") ;
         const response = await fetch('api/user' + "/" + selectedUserId,
             {
                 method: 'PUT',
@@ -89,14 +87,7 @@ export class ListUsers extends Component {
     }
 
     handleChange = (event) => {
-    /*        const { options } = event.target;
-            const value = [];
-            for (let i = 0, l = options.length; i < l; i += 1) {
-                if (options[i].selected) {
-                    value.push(options[i].value);
-                }
-            }
-            setPersonName(value);*/
+
         
         this.setState({selectedRoles: event.target.value});
     };
@@ -251,24 +242,4 @@ export class ListUsers extends Component {
         });
     }
 
-  /*  async populateUnitData() {
-        const token = await authService.getAccessToken();
-        const response = await fetch('odata/MilitaryUnits',
-            {
-                headers: !token
-                    ? {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    }
-                    : {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    }
-            });
-        const data = await response.json();
-
-        this.setState({units: data.value})
-
-    }*/
 }

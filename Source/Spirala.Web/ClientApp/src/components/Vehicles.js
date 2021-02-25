@@ -39,19 +39,8 @@ class Vehicles extends React.Component {
     }
 
     onRowUpdating(options) {
-        /*        var oldReg = options.oldData.RegistrationOfSoldier;
-                var newReg = options.newData.RegistrationOfSoldier;
-                var testAs = Object.assign(oldReg, newReg)
-                if (newReg) {
-                    
-                    options.newData = testAs;
-                    
-                }
-                options.newData = Object.assign(options.oldData, options.newData);*/
 
         options.newData = $.extend({}, options.oldData, options.newData);
-        //   options.newData = $.extend({}, options.oldData, options.newData);
-        // options.newData = Object.extend({}, options.oldData, options.newData);
 
     }
 

@@ -23,7 +23,6 @@ namespace Aut3.Models
         public string WhoChanged { get; set; }
         public string WhichModel { get; set; }
         public string Method { get; set; }
-        
         public Guid IdOfChangedItem { get; set; }
         public string WhichValue { get; set; }
         public string PreviousValue { get; set; }
