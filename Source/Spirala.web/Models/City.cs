@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNet.OData.Builder;
+﻿using Microsoft.AspNet.OData.Builder;
 
 namespace Aut3.Models
 {
-    public class County
+    public class City
     {
         public int ID { get; set; }
         public string Name { get; set; }
@@ -11,6 +10,7 @@ namespace Aut3.Models
         public int VoivodeshipID { get; set; }
         [AutoExpand] public Voivodeship Voivodeship { get; set; }
 
-        public virtual ICollection<City> Cities { get; set; }
+        public int CountyID { get; set; }
+        [AutoExpand] public County County { get; set; }
     }
 }
